@@ -7,9 +7,9 @@ services:
       context: .
       dockerfile: docker/app/Dockerfile
     networks:
-      - test-app-network
+      - laravel-template-network
     volumes:
-      - test-app-sync:/var/www:nocopy
+      - laravel-template-sync:/var/www:nocopy
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
 
   ### NGINX Server #########################################
@@ -22,9 +22,9 @@ services:
     depends_on:
       - app
     networks:
-      - test-app-network
+      - laravel-template-network
     volumes:
-      - test-app-sync:/var/www:nocopy
+      - laravel-template-sync:/var/www:nocopy
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
 
   ### DATABASE #############################################
@@ -42,16 +42,16 @@ services:
       - db-data:/var/lib/mysql
       - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
     networks:
-      - test-app-network
+      - laravel-template-network
 
 ### DOCKER NETWORKS ########################################
 networks:
-  test-app-network:
+  laravel-template-network:
     driver: bridge
 
 ### DOCKER VOLUMES #########################################
 volumes:
-  test-app-sync:
+  laravel-template-sync:
     external: true
   db-data:
     driver: local

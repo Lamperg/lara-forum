@@ -5,7 +5,7 @@ options:
 
 syncs:
 
-  test-app-sync:
+  laravel-template-sync:
     src: './'
     sync_host_port: 10877
     sync_userid: '33'
