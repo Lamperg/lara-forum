@@ -35,9 +35,9 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: secret
-      MYSQL_USER: app
+      MYSQL_USER: laravel
       MYSQL_PASSWORD: secret
-      MYSQL_DATABASE: app
+      MYSQL_DATABASE: laravel
     volumes:
       - db-data:/var/lib/mysql
       - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
