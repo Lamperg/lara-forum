@@ -5,7 +5,7 @@ options:
 
 syncs:
 
-  app-sync:
+  test-app-sync:
     src: './'
     sync_host_port: 10877
     sync_userid: '33'
