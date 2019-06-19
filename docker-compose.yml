@@ -1,0 +1,56 @@
+version: "3"
+services:
+
+  ### PHP-FPM ##############################################
+  app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    networks:
+      - app-network
+    volumes:
+      - app-sync:/var/www:nocopy
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+
+  ### NGINX Server #########################################
+  webserver:
+    image: nginx:alpine
+    ports:
+      - "8000:80"
+    links:
+      - app
+    depends_on:
+      - app
+    networks:
+      - app-network
+    volumes:
+      - app-sync:/var/www:nocopy
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+
+  ### DATABASE #############################################
+  db:
+    image: mysql:5.7.22
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 123
+      MYSQL_DATABASE: app
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-network
+
+### DOCKER NETWORKS ########################################
+networks:
+  app-network:
+    driver: bridge
+
+### DOCKER VOLUMES #########################################
+volumes:
+  app-sync:
+    external: true
+  db-data:
+    driver: local
