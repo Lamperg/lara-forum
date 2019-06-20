@@ -1,18 +1,20 @@
 version: "3"
 services:
 
-  ### PHP-FPM ##############################################
+  # PHP-FPM
+  #=============================================================================
   app:
     build:
       context: .
-      dockerfile: docker/app/Dockerfile
+      dockerfile: .docker/app/Dockerfile
     networks:
       - laravel-template-network
     volumes:
       - laravel-template-sync:/var/www:nocopy
-      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./.docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
 
-  ### NGINX Server #########################################
+  # NGINX Server
+  #=============================================================================
   webserver:
     image: nginx:alpine
     ports:
@@ -25,9 +27,10 @@ services:
       - laravel-template-network
     volumes:
       - laravel-template-sync:/var/www:nocopy
-      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./.docker/nginx/conf.d/:/etc/nginx/conf.d/
 
-  ### DATABASE #############################################
+  # DATABASE
+  #=============================================================================
   db:
     image: mysql:5.7.22
     restart: unless-stopped
@@ -40,16 +43,18 @@ services:
       MYSQL_DATABASE: laravel
     volumes:
       - db-data:/var/lib/mysql
-      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+      - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
     networks:
       - laravel-template-network
 
-### DOCKER NETWORKS ########################################
+# DOCKER NETWORKS
+#===============================================================================
 networks:
   laravel-template-network:
     driver: bridge
 
-### DOCKER VOLUMES #########################################
+# DOCKER VOLUMES
+#===============================================================================
 volumes:
   laravel-template-sync:
     external: true

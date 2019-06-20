@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-cd ..
+cd ../..
 docker-compose exec --user www-data app composer $@

@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-cd ..
+cd ../..
 docker-sync start && \
 docker-compose up -d $@
