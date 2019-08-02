@@ -5,7 +5,7 @@ options:
 
 syncs:
 
-  laravel-template-sync:
+  lara-forum-sync:
     src: './'
     sync_host_port: 10877
     sync_userid: '33'

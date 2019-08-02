@@ -8,9 +8,9 @@ services:
       context: .
       dockerfile: .docker/app/Dockerfile
     networks:
-      - laravel-template-network
+      - lara-forum-network
     volumes:
-      - laravel-template-sync:/var/www:nocopy
+      - lara-forum-sync:/var/www:nocopy
       - ./.docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
 
   # NGINX Server
@@ -24,9 +24,9 @@ services:
     depends_on:
       - app
     networks:
-      - laravel-template-network
+      - lara-forum-network
     volumes:
-      - laravel-template-sync:/var/www:nocopy
+      - lara-forum-sync:/var/www:nocopy
       - ./.docker/nginx/conf.d/:/etc/nginx/conf.d/
 
   # DATABASE
@@ -38,25 +38,25 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: secret
-      MYSQL_USER: laravel
+      MYSQL_USER: lara-forum
       MYSQL_PASSWORD: secret
-      MYSQL_DATABASE: laravel
+      MYSQL_DATABASE: lara-forum
     volumes:
       - db-data:/var/lib/mysql
       - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
     networks:
-      - laravel-template-network
+      - lara-forum-network
 
 # DOCKER NETWORKS
 #===============================================================================
 networks:
-  laravel-template-network:
+  lara-forum-network:
     driver: bridge
 
 # DOCKER VOLUMES
 #===============================================================================
 volumes:
-  laravel-template-sync:
+  lara-forum-sync:
     external: true
   db-data:
     driver: local
