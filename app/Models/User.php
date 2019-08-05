@@ -2,12 +2,20 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * Class User
+ *
+ * @property integer       $id
+ * @property string        $name
+ * @property string        $email
+ * @property string        $password
+ * @property Carbon|string $created_at
+ * @property Carbon|string $updated_at
  *
  * @package App\Models
  * @mixin \Eloquent

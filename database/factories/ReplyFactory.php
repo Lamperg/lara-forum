@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factory;
 $factory->define(Reply::class, function (Faker $faker) {
     return [
         'body' => $faker->paragraph,
-        'user_id' => \factory(User::class),
+        'user_id' => factory(User::class),
         'thread_id' => factory(Thread::class),
     ];
 });
