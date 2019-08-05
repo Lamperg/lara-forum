@@ -12,8 +12,15 @@ use Illuminate\Database\Eloquent\Model;
  * @property string  $body
  *
  * @package App\Models
+ * @mixin \Eloquent
  */
 class Thread extends Model
 {
-    //
+    /**
+     * @return string
+     */
+    public function path()
+    {
+        return route('threads.show', $this);
+    }
 }

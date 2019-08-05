@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string  $body
  *
  * @package App\Models
+ * @mixin \Eloquent
  */
 class Reply extends Model
 {

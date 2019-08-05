@@ -11,6 +11,8 @@ use Illuminate\Foundation\Console\ModelMakeCommand as Command;
  */
 class ModelMakeCommand extends Command
 {
+    const MODELS_NAMESPACE = 'Models';
+
     /**
      * Get the default namespace for the class.
      *
@@ -20,6 +22,6 @@ class ModelMakeCommand extends Command
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return "{$rootNamespace}\Models";
+        return "{$rootNamespace}\\" . self::MODELS_NAMESPACE;
     }
 }
