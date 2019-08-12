@@ -19,9 +19,8 @@ Route::get('/', function () {
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::resource('threads', 'ThreadController');
+
 Route::prefix('threads/')->name('threads.')->group(function () {
-    Route::get('/', 'ThreadController@index')->name('index');
-    Route::post('/', 'ThreadController@store')->name('store');
-    Route::get('{thread}', 'ThreadController@show')->name('show');
     Route::post('{thread}/replies', 'ReplyController@store')->name('replies_store');
 });

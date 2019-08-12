@@ -18,9 +18,7 @@ class ParticipateInForumTest extends TestCase
      */
     public function guestsMayNotAddReply()
     {
-        $this->expectException(AuthenticationException::class);
-
-        $this->post("threads/1/replies", []);
+        $this->post("threads/1/replies")->assertRedirect('login');
     }
 
     /**
