@@ -30,10 +30,10 @@ class ParticipateInForumTest extends TestCase
     {
         $this->signIn();
 
-        /** @var Thread $thread */
-        $thread = factory(Thread::class)->create();
         /** @var Reply $reply */
-        $reply = factory(Reply::class)->make();
+        $reply = make(Reply::class);
+        /** @var Thread $thread */
+        $thread = create(Thread::class);
 
         $this->post("{$thread->path()}/replies", $reply->toArray());
 

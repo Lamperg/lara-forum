@@ -18,11 +18,14 @@ class ThreadTest extends TestCase
      */
     protected $thread;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->thread = factory(Thread::class)->create();
+        $this->thread = create(Thread::class);
     }
 
     /**
@@ -49,10 +52,7 @@ class ThreadTest extends TestCase
      */
     public function hasOwner()
     {
-        /** @var Thread $thread */
-        $thread = factory(Thread::class)->create();
-
-        $this->assertInstanceOf(User::class, $thread->owner);
+        $this->assertInstanceOf(User::class, $this->thread->owner);
     }
 
     /**

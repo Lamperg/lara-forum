@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
+use Tests\TestCase;
 use App\Models\Thread;
 use Illuminate\Auth\AuthenticationException;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -30,7 +30,7 @@ class CreateThreadsTest extends TestCase
         $this->signIn();
 
         /** @var Thread $thread */
-        $thread = factory(Thread::class)->make();
+        $thread = make(Thread::class);
 
         $this->post(route('threads.store'), $thread->toArray());
 
