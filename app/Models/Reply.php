@@ -21,6 +21,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Reply extends Model
 {
     /**
+     * {@inheritDoc}
+     */
+    protected $guarded = [];
+
+    /**
      * @return BelongsTo
      */
     public function owner()
