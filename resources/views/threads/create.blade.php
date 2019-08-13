@@ -1,9 +1,5 @@
 @extends('layouts.app')
 
-@php
-    /** @var \App\Models\Thread $thread */
-@endphp
-
 @section('content')
     <div class="container">
         <div class="row justify-content-center">

@@ -5,7 +5,6 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Reply;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ReplyTest extends TestCase
@@ -15,7 +14,7 @@ class ReplyTest extends TestCase
     /**
      * @test
      */
-    public function hasAnOwner()
+    public function has_owner()
     {
         /** @var Reply $reply */
         $reply = create(Reply::class);

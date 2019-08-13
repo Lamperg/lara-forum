@@ -6,7 +6,6 @@ use App\Models\User;
 use Tests\TestCase;
 use App\Models\Thread;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ThreadTest extends TestCase
@@ -31,7 +30,7 @@ class ThreadTest extends TestCase
     /**
      * @test
      */
-    public function hasPath()
+    public function has_path()
     {
         $this->assertEquals(
             route('threads.show', $this->thread),
@@ -42,7 +41,7 @@ class ThreadTest extends TestCase
     /**
      * @test
      */
-    public function hasReplies()
+    public function has_replies()
     {
         $this->assertInstanceOf(Collection::class, $this->thread->replies);
     }
@@ -50,7 +49,7 @@ class ThreadTest extends TestCase
     /**
      * @test
      */
-    public function hasOwner()
+    public function has_owner()
     {
         $this->assertInstanceOf(User::class, $this->thread->owner);
     }
@@ -58,7 +57,7 @@ class ThreadTest extends TestCase
     /**
      * @test
      */
-    public function canAddReply()
+    public function can_add_reply()
     {
         $this->thread->addReply([
             'body' => 'Foobar',

@@ -29,7 +29,7 @@ class ReadThreadsTest extends TestCase
     /**
      * @test
      */
-    public function userCanViewAllThreads()
+    public function user_can_view_all_threads()
     {
         $this
             ->get(route('threads.index'))
@@ -39,7 +39,7 @@ class ReadThreadsTest extends TestCase
     /**
      * @test
      */
-    public function userCanReadSingleThread()
+    public function user_can_read_single_thread()
     {
         $this
             ->get($this->thread->path())
@@ -49,7 +49,7 @@ class ReadThreadsTest extends TestCase
     /**
      * @test
      */
-    public function userCanReadRepliesThatAreAssociatedWithThread()
+    public function user_can_read_replies_that_are_associated_with_thread()
     {
         /** @var Reply $reply */
         $reply = factory(Reply::class)->create([

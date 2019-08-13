@@ -5,8 +5,6 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\Reply;
 use App\Models\Thread;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ParticipateInForumTest extends TestCase
@@ -16,7 +14,7 @@ class ParticipateInForumTest extends TestCase
     /**
      * @test
      */
-    public function guestsMayNotAddReply()
+    public function guests_cannot_add_reply()
     {
         $this->post("threads/1/replies")->assertRedirect('login');
     }
@@ -24,7 +22,7 @@ class ParticipateInForumTest extends TestCase
     /**
      * @test
      */
-    public function authenticatedUserMayParticipateInForumThreads()
+    public function authenticated_user_may_participate_in_threads()
     {
         $this->signIn();
 
