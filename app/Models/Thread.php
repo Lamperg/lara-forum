@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|string      $updated_at
  * @property Collection|Reply[] $replies
  * @property User               $owner
+ * @property Channel            $channel
  *
  * @package App\Models
  * @mixin \Eloquent
@@ -28,16 +29,6 @@ class Thread extends Model
      * {@inheritDoc}
      */
     protected $guarded = [];
-
-    /**
-     * The path to the thread.
-     *
-     * @return string
-     */
-    public function path()
-    {
-        return route('threads.show', $this);
-    }
 
     /**
      * @return HasMany
@@ -53,6 +44,24 @@ class Thread extends Model
     public function owner()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function channel()
+    {
+        return $this->belongsTo(Channel::class);
+    }
+
+    /**
+     * The path to the thread.
+     *
+     * @return string
+     */
+    public function path()
+    {
+        return "/threads/{$this->channel->slug}/{$this->id}";
     }
 
     /**

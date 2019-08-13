@@ -15,15 +15,8 @@ class CreateThreadsTest extends TestCase
      */
     public function guests_cannot_create_threads()
     {
-        $this->post(route('threads.store'), [])->assertRedirect('login');
-    }
-
-    /**
-     * @test
-     */
-    public function guests_cannot_see_create_thread_page()
-    {
         $this->get(route('threads.create'))->assertRedirect('login');
+        $this->post(route('threads.store'))->assertRedirect('login');
     }
 
     /**
@@ -34,7 +27,7 @@ class CreateThreadsTest extends TestCase
         $this->signIn();
 
         /** @var Thread $thread */
-        $thread = make(Thread::class);
+        $thread = create(Thread::class);
 
         $this->post(route('threads.store'), $thread->toArray());
 

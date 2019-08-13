@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use App\Models\Thread;
+use App\Models\Channel;
 use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
 
@@ -13,5 +14,6 @@ $factory->define(Thread::class, function (Faker $faker) {
         'title' => $faker->sentence(3),
         'body' => $faker->paragraph,
         'user_id' => factory(User::class),
+        'channel_id' => factory(Channel::class),
     ];
 });

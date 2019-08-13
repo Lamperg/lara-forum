@@ -16,7 +16,10 @@ class ParticipateInForumTest extends TestCase
      */
     public function guests_cannot_add_reply()
     {
-        $this->post("threads/1/replies")->assertRedirect('login');
+        /** @var Thread $thread */
+        $thread = create(Thread::class);
+
+        $this->post("{$thread->path()}/replies")->assertRedirect('login');
     }
 
     /**

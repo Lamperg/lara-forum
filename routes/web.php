@@ -19,8 +19,10 @@ Route::get('/', function () {
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resource('threads', 'ThreadController');
-
 Route::prefix('threads/')->name('threads.')->group(function () {
-    Route::post('{thread}/replies', 'ReplyController@store')->name('replies_store');
+    Route::get('/', 'ThreadController@index')->name('index');
+    Route::post('/', 'ThreadController@store')->name('store');
+    Route::get('/create', 'ThreadController@create')->name('create');
+    Route::get('{channel}/{thread}', 'ThreadController@show')->name('show');
+    Route::post('{channel}/{thread}/replies', 'ReplyController@store')->name('replies_store');
 });

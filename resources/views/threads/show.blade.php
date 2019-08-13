@@ -33,7 +33,7 @@
                     <div class="card mt-2">
                         <div class="card-body">
 
-                            <form action="{{ route('threads.replies_store', $thread) }}" method="post">
+                            <form action="{{ route('threads.replies_store', [$thread->channel, $thread]) }}" method="post">
                                 @csrf
                                 <div class="form-group">
                                     <label for="body">Reply:</label>
