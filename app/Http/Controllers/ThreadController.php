@@ -50,6 +50,12 @@ class ThreadController extends Controller
      */
     public function store()
     {
+        request()->validate([
+            'body' => 'required',
+            'title' => 'required',
+            'channel_id' => 'required|exists:channels,id',
+        ]);
+
         $thread = Thread::create([
             'body' => request('body'),
             'title' => request('title'),

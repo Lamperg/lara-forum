@@ -28,7 +28,6 @@ class ParticipateInForumTest extends TestCase
     public function authenticated_user_may_participate_in_threads()
     {
         $this->signIn();
-
         /** @var Reply $reply */
         $reply = make(Reply::class);
         /** @var Thread $thread */
@@ -37,5 +36,20 @@ class ParticipateInForumTest extends TestCase
         $this->post("{$thread->path()}/replies", $reply->toArray());
 
         $this->get($thread->path())->assertSee($reply->body);
+    }
+
+    /**
+     * @test
+     */
+    public function reply_requires_a_body()
+    {
+        $this->signIn();
+        /** @var Thread $thread */
+        $thread = create(Thread::class);
+        /** @var Reply $reply */
+        $reply = make(Reply::class, ['body' => null]);
+
+        $this->post("{$thread->path()}/replies", $reply->toArray())
+            ->assertSessionHasErrors('body');
     }
 }
