@@ -43,13 +43,13 @@ class ParticipateInForumTest extends TestCase
      */
     public function reply_requires_a_body()
     {
-        $this->signIn();
         /** @var Thread $thread */
         $thread = create(Thread::class);
         /** @var Reply $reply */
         $reply = make(Reply::class, ['body' => null]);
 
-        $this->post("{$thread->path()}/replies", $reply->toArray())
+        $this->actingAs($thread->owner)
+            ->post("{$thread->path()}/replies", $reply->toArray())
             ->assertSessionHasErrors('body');
     }
 }

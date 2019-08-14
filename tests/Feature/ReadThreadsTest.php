@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Channel;
 use App\Models\Reply;
 use App\Models\Thread;
 use Tests\TestCase;
@@ -59,5 +60,22 @@ class ReadThreadsTest extends TestCase
         $this
             ->get($this->thread->path())
             ->assertSee($reply->body);
+    }
+
+    /**
+     * @test
+     */
+    public function user_can_filter_threads_according_to_a_channel()
+    {
+        /** @var Channel $channel */
+        $channel = create(Channel::class);
+        /** @var Thread $threadNotInChannel */
+        $threadNotInChannel = create(Thread::class);
+        /** @var Thread $threadInChannel */
+        $threadInChannel = create(Thread::class, ['channel_id' => $channel->id]);
+
+        $this->get('/threads/' . $channel->slug)
+            ->assertSee($threadInChannel->title)
+            ->assertDontSee($threadNotInChannel->title);
     }
 }
