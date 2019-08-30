@@ -37,6 +37,9 @@
                     <li class="nav-item">
                         <a href="{{ route('threads.index') }}" class="nav-link">All Threads</a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('threads.create') }}" class="nav-link">New Thread</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
@@ -46,7 +49,7 @@
 
                             @foreach(\App\Models\Channel::all() as $channel)
                                 @php
-                                /** @var \App\Models\Channel $channel */
+                                    /** @var \App\Models\Channel $channel */
                                 @endphp
                                 <a class="dropdown-item" href="{{ route('threads.channel_index', $channel) }}">
                                     {{ $channel->name }}
