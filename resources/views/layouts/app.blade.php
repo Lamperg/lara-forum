@@ -47,7 +47,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                            @foreach(\App\Models\Channel::all() as $channel)
+                            @foreach($channels as $channel)
                                 @php
                                     /** @var \App\Models\Channel $channel */
                                 @endphp
