@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Collection|Reply[] $replies
  * @property User               $owner
  * @property Channel            $channel
+ * @property int                $replies_count
  *
  * @method static Builder|Thread filter(Filters $filters)
  *
@@ -33,6 +34,18 @@ class Thread extends Model
      * {@inheritDoc}
      */
     protected $guarded = [];
+
+    /**
+     * {@inheritDoc}
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('replyCount', function (Builder $builder) {
+            $builder->withCount('replies');
+        });
+    }
 
     /**
      * @return HasMany
