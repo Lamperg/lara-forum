@@ -27,3 +27,5 @@ Route::prefix('threads/')->name('threads.')->group(function () {
     Route::get('{channel}/{thread}', 'ThreadController@show')->name('show');
     Route::post('{channel}/{thread}/replies', 'ReplyController@store')->name('replies_store');
 });
+
+Route::post('/replies/{reply}/favorites', 'FavoriteController@store')->name('replies.favorite_store');
