@@ -11,12 +11,12 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 /**
  * Class Reply
  *
- * @property integer       $id
- * @property string        $body
- * @property Carbon|string $created_at
- * @property Carbon|string $updated_at
- * @property User          $owner
- * @property Collection|Favorite[]    $favorites
+ * @property integer               $id
+ * @property string                $body
+ * @property Carbon|string         $created_at
+ * @property Carbon|string         $updated_at
+ * @property User                  $owner
+ * @property Collection|Favorite[] $favorites
  *
  * @package App\Models
  * @mixin \Eloquent
@@ -46,6 +46,8 @@ class Reply extends Model
 
     /**
      * Favorites a reply by authenticated user.
+     *
+     * @return Model
      */
     public function favorite()
     {
@@ -53,5 +55,13 @@ class Reply extends Model
         if (!$this->favorites()->where($attributes)->exists()) {
             return $this->favorites()->create($attributes);
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFavorited()
+    {
+        return $this->favorites()->where(['user_id' => auth()->id()])->exists();
     }
 }

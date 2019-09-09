@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reply;
- use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\RedirectResponse;
 
 /**
  * Class FavoriteController
@@ -23,10 +23,12 @@ class FavoriteController extends Controller
     /**
      * @param Reply $reply
      *
-     * @return Model
+     * @return RedirectResponse
      */
     public function store(Reply $reply)
     {
-        return $reply->favorite();
+        $reply->favorite();
+
+        return back();
     }
 }
