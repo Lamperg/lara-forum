@@ -7,6 +7,7 @@ use App\Models\Channel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Filters\ThreadFilters;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class ThreadController
@@ -29,18 +30,19 @@ class ThreadController extends Controller
      * @param Channel       $channel
      * @param ThreadFilters $filters
      *
-     * @return Response
+     * @return mixed
      */
     public function index(Channel $channel, ThreadFilters $filters)
     {
+        /** @var Collection $threads */
+        $threads = Thread::with('channel')
+            ->latest()
+            ->filter($filters)
+            ->get();
+
         if ($channel->exists) {
-            $threads = $channel->threads()->latest();
-        } else {
-            $threads = Thread::latest();
+            $threads->where('channel_id', $channel->id);
         }
-
-        $threads = $threads->filter($filters)->get();
-
         if (\request()->wantsJson()) {
             return $threads;
         }

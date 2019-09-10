@@ -9,13 +9,10 @@
             </span>
 
             <div>
-                @php
-                    $favoritesCount = $reply->favorites()->count();
-                @endphp
                 <form action="{{ route('replies.favorite_store', $reply) }}" method="post">
                     @csrf
                     <button type="submit" class="btn btn-primary" {{ $reply->isFavorited() ? 'disabled' : '' }}>
-                        {{ $favoritesCount }} {{ \Str::plural('Favorite', $favoritesCount) }}
+                        {{ $reply->favorites_count }} {{ \Str::plural('Favorite', $reply->favorites_count) }}
                     </button>
                 </form>
             </div>
