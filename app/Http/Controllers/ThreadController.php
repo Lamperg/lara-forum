@@ -35,13 +35,10 @@ class ThreadController extends Controller
     public function index(Channel $channel, ThreadFilters $filters)
     {
         /** @var Collection $threads */
-        $threads = Thread::with('channel')
-            ->latest()
-            ->filter($filters)
-            ->get();
+        $threads = Thread::latest()->filter($filters)->get();
 
         if ($channel->exists) {
-            $threads->where('channel_id', $channel->id);
+            $threads = $threads->where('channel_id', $channel->id);
         }
         if (\request()->wantsJson()) {
             return $threads;

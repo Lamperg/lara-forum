@@ -38,6 +38,11 @@ class Thread extends Model
     /**
      * {@inheritDoc}
      */
+    protected $with = ['owner', 'channel'];
+
+    /**
+     * {@inheritDoc}
+     */
     protected static function boot()
     {
         parent::boot();
@@ -52,10 +57,7 @@ class Thread extends Model
      */
     public function replies()
     {
-        return $this
-            ->hasMany(Reply::class)
-            ->withCount('favorites')
-            ->with('owner');
+        return $this->hasMany(Reply::class);
     }
 
     /**
