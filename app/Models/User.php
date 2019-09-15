@@ -3,19 +3,22 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * Class User
  *
- * @property integer       $id
- * @property string        $name
- * @property string        $email
- * @property string        $password
- * @property Carbon|string $created_at
- * @property Carbon|string $updated_at
+ * @property integer             $id
+ * @property string              $name
+ * @property string              $email
+ * @property string              $password
+ * @property Carbon|string       $created_at
+ * @property Carbon|string       $updated_at
+ * @property Collection|Thread[] $threads
  *
  * @package App\Models
  * @mixin \Eloquent
@@ -53,4 +56,20 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRouteKeyName()
+    {
+        return 'name';
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function threads()
+    {
+        return $this->hasMany(Thread::class)->latest();
+    }
 }

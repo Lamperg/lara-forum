@@ -29,3 +29,5 @@ Route::prefix('threads/')->name('threads.')->group(function () {
 });
 
 Route::post('/replies/{reply}/favorites', 'FavoriteController@store')->name('replies.favorite_store');
+
+Route::get('profiles/{user}', 'ProfileController@show')->name('profiles.show');
