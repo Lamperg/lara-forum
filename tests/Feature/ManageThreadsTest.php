@@ -2,13 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Models\Reply;
 use Tests\TestCase;
 use App\Models\Thread;
 use App\Models\Channel;
 use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class CreateThreadsTest extends TestCase
+class ManageThreadsTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -70,6 +71,36 @@ class CreateThreadsTest extends TestCase
         $nonExistChannelId = 999;
         $this->publishThread(['channel_id' => $nonExistChannelId])
             ->assertSessionHasErrors('channel_id');
+    }
+
+    /**
+     * @test
+     */
+    public function guest_cannot_delete_thread()
+    {
+        /** @var Thread $thread */
+        $thread = create(Thread::class);
+
+        $this->delete($thread->path())->assertRedirect('/login');
+    }
+
+    /**
+     * @test
+     */
+    public function thread_can_be_deleted()
+    {
+        $this->signIn();
+
+        /** @var Thread $thread */
+        $thread = create(Thread::class);
+        /** @var Reply $reply */
+        $reply = create(Reply::class, ['thread_id' => $thread->id]);
+
+        $this->json('delete', $thread->path())
+            ->assertStatus(204);
+
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+        $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
     }
 
     /**

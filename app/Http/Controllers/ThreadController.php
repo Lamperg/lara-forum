@@ -97,39 +97,20 @@ class ThreadController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Thread $thread
-     *
-     * @return Response
-     */
-    public function edit(Thread $thread)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param Thread  $thread
-     *
-     * @return Response
-     */
-    public function update(Request $request, Thread $thread)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
-     * @param Thread $thread
+     * @param Channel $channel
+     * @param Thread  $thread
      *
-     * @return Response
+     * @return void
+     * @throws \Exception
      */
-    public function destroy(Thread $thread)
+    public function destroy(Channel $channel, Thread $thread)
     {
-        //
+        $thread->delete();
+
+        return \request()->wantsJson()
+            ? response([], 204)
+            : redirect(route('threads.index'));
     }
 }
