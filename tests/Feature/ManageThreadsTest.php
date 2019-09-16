@@ -76,28 +76,30 @@ class ManageThreadsTest extends TestCase
     /**
      * @test
      */
-    public function guest_cannot_delete_thread()
+    public function unauthorized_user_cannot_delete_thread()
     {
         /** @var Thread $thread */
         $thread = create(Thread::class);
-
         $this->delete($thread->path())->assertRedirect('/login');
+
+        $this->signIn();
+        $this->delete($thread->path())->assertForbidden();
     }
 
     /**
      * @test
      */
-    public function thread_can_be_deleted()
+    public function authorized_user_can_delete_own_thread()
     {
         $this->signIn();
 
         /** @var Thread $thread */
-        $thread = create(Thread::class);
+        $thread = create(Thread::class, ['user_id' => auth()->id()]);
+
         /** @var Reply $reply */
         $reply = create(Reply::class, ['thread_id' => $thread->id]);
 
-        $this->json('delete', $thread->path())
-            ->assertStatus(204);
+        $this->json('delete', $thread->path())->assertStatus(204);
 
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
         $this->assertDatabaseMissing('threads', ['id' => $thread->id]);

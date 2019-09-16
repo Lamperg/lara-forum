@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string             $body
  * @property Carbon|string      $created_at
  * @property Carbon|string      $updated_at
+ * @property string             $user_id
  * @property Collection|Reply[] $replies
  * @property User               $owner
  * @property Channel            $channel

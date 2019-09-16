@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Thread;
 use App\Models\Channel;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Filters\ThreadFilters;
 use Illuminate\Database\Eloquent\Collection;
@@ -102,15 +101,19 @@ class ThreadController extends Controller
      * @param Channel $channel
      * @param Thread  $thread
      *
-     * @return void
+     * @return mixed
      * @throws \Exception
      */
     public function destroy(Channel $channel, Thread $thread)
     {
+        $this->authorize('update', $thread);
+
         $thread->delete();
 
-        return \request()->wantsJson()
-            ? response([], 204)
-            : redirect(route('threads.index'));
+        if (request()->wantsJson()) {
+            return \response([], 204);
+        }
+
+        return redirect(route('threads.index'));
     }
 }
