@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Favoritable;
+use App\Traits\RecordsActivity;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,18 +11,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class Reply
  *
- * @property integer               $id
- * @property string                $body
- * @property Carbon|string         $created_at
- * @property Carbon|string         $updated_at
- * @property User                  $owner
+ * @property integer       $id
+ * @property string        $body
+ * @property Carbon|string $created_at
+ * @property Carbon|string $updated_at
+ * @property User          $owner
  *
  * @package App\Models
  * @mixin \Eloquent
  */
 class Reply extends Model
 {
-    use Favoritable;
+    use Favoritable ,RecordsActivity;
 
     /**
      * {@inheritDoc}

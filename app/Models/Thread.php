@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\RecordsActivity;
 use Carbon\Carbon;
 use App\Filters\Filters;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +32,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Thread extends Model
 {
+    use RecordsActivity;
+
+    const STATE_CREATED = 'created_thread';
+
     /**
      * {@inheritDoc}
      */
