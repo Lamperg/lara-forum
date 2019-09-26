@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -41,5 +42,24 @@ class Activity extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @param User $user
+     *
+     * @param int  $take
+     *
+     * @return Collection
+     */
+    public static function feed(User $user, int $take = 50)
+    {
+        return static::where('user_id', $user->id)
+            ->latest()
+            ->with('subject')
+            ->take($take)
+            ->get()
+            ->groupBy(function (Activity $activity) {
+                return $activity->created_at->format('Y-m-d');
+            });
     }
 }

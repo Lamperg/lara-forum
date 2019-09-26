@@ -28,8 +28,7 @@ class ProfilesTest extends TestCase
      */
     public function profiles_display_all_threads_created_by_associated_user()
     {
-        /** @var User $user */
-        $user = create(User::class);
+        $user = $this->signIn();
         /** @var Thread $thread */
         $thread = create(Thread::class, ['user_id' => $user->id]);
 
