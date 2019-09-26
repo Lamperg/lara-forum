@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    /** @var \App\Models\Thread $thread */
+    /** @var App\Models\Activity $activity */
     /** @var App\Models\User $profileUser */
 @endphp
 
@@ -14,25 +14,15 @@
                     <small>Since {{ $profileUser->created_at->diffForHumans() }}</small>
                 </div>
 
-                @foreach($threads as $thread)
-                    <div class="card mt-2">
-                        <div class="card-header">
-                            <div class="level">
-                         <span class="flex">
-                             <a href="{{ route('profiles.show', $thread->owner) }}">{{ $thread->owner->name }}</a> posted:
-                             <a href="{{ $thread->path() }}">{{ $thread->title }}</a>
-                         </span>
-                                <span>{{ $thread->created_at->diffForHumans() }}</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            {{ $thread->body }}
-                        </div>
-                    </div>
-                @endforeach
+                @foreach($activities as $date => $records)
+                    <h3 class="page-header">{{ $date }}</h3>
 
+                    @foreach($records as $activity)
+                        @include("profiles.activities.{$activity->type}")
+                    @endforeach
+                @endforeach
                 <div class="mt-2">
-                    {{ $threads->links() }}
+                    {{--                    {{ $threads->links() }}--}}
                 </div>
             </div>
         </div>

@@ -16,13 +16,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|string $created_at
  * @property Carbon|string $updated_at
  * @property User          $owner
+ * @property Thread        $thread
  *
  * @package App\Models
  * @mixin \Eloquent
  */
 class Reply extends Model
 {
-    use Favoritable ,RecordsActivity;
+    use Favoritable, RecordsActivity;
+
+    const STATE_CREATED = 'created_reply';
 
     /**
      * {@inheritDoc}
@@ -40,5 +43,13 @@ class Reply extends Model
     public function owner()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function thread()
+    {
+        return $this->belongsTo(Thread::class);
     }
 }

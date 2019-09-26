@@ -19,6 +19,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property Carbon|string       $created_at
  * @property Carbon|string       $updated_at
  * @property Collection|Thread[] $threads
+ * @property Collection|Activity[] $activity
  *
  * @package App\Models
  * @mixin \Eloquent
@@ -71,5 +72,13 @@ class User extends Authenticatable
     public function threads()
     {
         return $this->hasMany(Thread::class)->latest();
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function activity()
+    {
+        return $this->hasMany(Activity::class);
     }
 }

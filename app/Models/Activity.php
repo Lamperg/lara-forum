@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -9,10 +10,12 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 /**
  * Class Activity
  *
- * @property integer $id
- * @property User    $user
- * @property Model   $subject
- * @property string  $type
+ * @property integer            $id
+ * @property User               $user
+ * @property Model|Thread|Reply $subject
+ * @property string             $type
+ * @property Carbon|string      $created_at
+ * @property Carbon|string      $updated_at
  *
  * @package App\Models
  * @mixin \Eloquent
