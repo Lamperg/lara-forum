@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Activity;
 use App\Models\Reply;
 use Tests\TestCase;
 use App\Models\Thread;
@@ -95,7 +96,6 @@ class ManageThreadsTest extends TestCase
 
         /** @var Thread $thread */
         $thread = create(Thread::class, ['user_id' => auth()->id()]);
-
         /** @var Reply $reply */
         $reply = create(Reply::class, ['thread_id' => $thread->id]);
 
@@ -103,6 +103,7 @@ class ManageThreadsTest extends TestCase
 
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
         $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
+        $this->assertEquals(0, Activity::count());
     }
 
     /**
