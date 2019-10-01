@@ -11,5 +11,7 @@ yarn-error.log
 .idea
 .docker-sync
 .composer
+.config
+.npm
 
 _ide_helper.php
