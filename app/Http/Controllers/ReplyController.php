@@ -40,6 +40,6 @@ class ReplyController extends Controller
         ]);
 
         return back()
-            ->with('flash', 'Your reply has been left');
+            ->with('flash', __('messages.reply.store'));
     }
 }

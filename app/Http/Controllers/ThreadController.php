@@ -77,7 +77,7 @@ class ThreadController extends Controller
         ]);
 
         return redirect($thread->path())
-            ->with('flash', 'Your thread has been published!');
+            ->with('flash', __('messages.thread.store'));
     }
 
     /**
