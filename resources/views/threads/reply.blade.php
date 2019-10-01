@@ -1,7 +1,7 @@
 @php
     /** @var App\Models\Reply $reply */;
 @endphp
-<div class="card mt-2">
+<div id="reply-{{ $reply->id }}" class="card mt-2">
     <div class="card-header">
         <div class="level">
             <span class="flex">
