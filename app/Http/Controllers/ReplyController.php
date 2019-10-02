@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Reply;
 use App\Models\Thread;
 use Illuminate\Http\RedirectResponse;
 
@@ -41,5 +42,20 @@ class ReplyController extends Controller
 
         return back()
             ->with('flash', __('messages.reply.store'));
+    }
+
+    /**
+     * @param Reply $reply
+     *
+     * @return RedirectResponse
+     * @throws \Exception
+     */
+    public function destroy(Reply $reply)
+    {
+        $this->authorize('update', $reply);
+
+        $reply->delete();
+
+        return back();
     }
 }

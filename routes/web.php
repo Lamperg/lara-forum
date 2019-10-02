@@ -29,6 +29,9 @@ Route::prefix('threads/')->name('threads.')->group(function () {
     Route::post('{channel}/{thread}/replies', 'ReplyController@store')->name('replies_store');
 });
 
-Route::post('/replies/{reply}/favorites', 'FavoriteController@store')->name('replies.favorite_store');
+Route::prefix('replies/')->name('replies.')->group(function () {
+    Route::delete('{reply}', 'ReplyController@destroy')->name('destroy');
+    Route::post('{reply}/favorites', 'FavoriteController@store')->name('favorite_store');
+});
 
 Route::get('profiles/{user}', 'ProfileController@show')->name('profiles.show');
