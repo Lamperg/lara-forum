@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reply;
 use App\Models\Thread;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 
 /**
@@ -42,6 +43,20 @@ class ReplyController extends Controller
 
         return back()
             ->with('flash', __('messages.reply.store'));
+    }
+
+    /**
+     * @param Reply $reply
+     *
+     * @throws AuthorizationException
+     */
+    public function update(Reply $reply)
+    {
+        $this->authorize('update', $reply);
+
+        $reply->update([
+            'body' => request('body'),
+        ]);
     }
 
     /**

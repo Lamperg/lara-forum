@@ -30,8 +30,9 @@ Route::prefix('threads/')->name('threads.')->group(function () {
 });
 
 Route::prefix('replies/')->name('replies.')->group(function () {
+    Route::patch('{reply}', 'ReplyController@update')->name('update');
     Route::delete('{reply}', 'ReplyController@destroy')->name('destroy');
-    Route::post('{reply}/favorites', 'FavoriteController@store')->name('favorite_store');
+    Route::post('{reply}/favorites', 'FavoriteController@store')->name( 'favorite_store');
 });
 
 Route::get('profiles/{user}', 'ProfileController@show')->name('profiles.show');

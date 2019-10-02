@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Reply;
 use App\Models\Thread;
@@ -9,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ParticipateInForumTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     /**
      * @test
@@ -80,5 +81,43 @@ class ParticipateInForumTest extends TestCase
         $this->delete(route('replies.destroy', $reply));
 
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+    }
+
+    /**
+     * @test
+     */
+    public function unauthorized_users_cannot_update_replies()
+    {
+        /** @var Reply $reply */
+        $reply = create(Reply::class);
+        $updateUrl = route('replies.update', $reply);
+
+        $this->patch($updateUrl)->assertRedirect('login');
+
+        $this->signIn();
+        $this->delete($updateUrl)->assertStatus(403);
+    }
+
+    /**
+     * @test
+     */
+    public function authorized_users_can_update_replies()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = $this->signIn();
+        /** @var Reply $reply */
+        $reply = create(Reply::class, ['user_id' => $user->id]);
+
+        $attributes = [
+            'body' => $this->faker->sentence,
+        ];
+
+        $this->patch("/replies/{$reply->id}", $attributes);
+
+        $this->assertDatabaseHas('replies', [
+            'id' => $reply->id,
+            'body' => $attributes['body'],
+        ]);
     }
 }
