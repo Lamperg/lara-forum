@@ -1768,7 +1768,16 @@ __webpack_require__.r(__webpack_exports__);
         body: this.body
       }).then(function () {
         _this.editing = false;
-        flash('The Reply has been updated');
+        flash('The reply has been updated');
+      });
+    },
+    destroy: function destroy() {
+      var _this2 = this;
+
+      axios["delete"]("/replies/".concat(this.attributes.id)).then(function () {
+        $(_this2.$el).fadeOut(300, function () {
+          flash('The reply has been deleted');
+        });
       });
     }
   }
