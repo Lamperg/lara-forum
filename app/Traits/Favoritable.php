@@ -38,6 +38,14 @@ trait Favoritable
     }
 
     /**
+     * Unfavorites a reply by authenticated user.
+     */
+    public function unfavorite()
+    {
+        return $this->favorites()->where(['user_id' => auth()->id()])->delete();
+    }
+
+    /**
      * @return bool
      */
     public function isFavorited()
@@ -51,5 +59,13 @@ trait Favoritable
     public function getFavoritesCountAttribute()
     {
         return $this->favorites->count();
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsFavoritedAttribute()
+    {
+        return $this->isFavorited();
     }
 }

@@ -16,12 +16,10 @@
             </span>
 
                 <div>
-                    <form action="{{ route('replies.favorite_store', $reply) }}" method="post">
-                        @csrf
-                        <button type="submit" class="btn btn-primary" {{ $reply->isFavorited() ? 'disabled' : '' }}>
-                            {{ $reply->favorites_count }} {{ \Str::plural('Favorite', $reply->favorites_count) }}
-                        </button>
-                    </form>
+                    <favorite-base
+                        :reply="{{ $reply }}"
+                        url="{{ route('replies.favorite_store', $reply) }}"
+                    ></favorite-base>
                 </div>
             </div>
         </div>

@@ -38,6 +38,11 @@ class Reply extends Model
     protected $with = ['owner', 'favorites'];
 
     /**
+     * {@inheritDoc}
+     */
+    protected $appends = ['favoritesCount', 'isFavorited'];
+
+    /**
      * @return BelongsTo
      */
     public function owner()

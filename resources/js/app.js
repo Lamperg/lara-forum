@@ -30,6 +30,10 @@ Vue.component(
     'reply-base',
     require('./components/ReplyBase.vue').default
 );
+Vue.component(
+    'favorite-base',
+    require('./components/FavoriteBase.vue').default
+);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -41,6 +45,10 @@ const app = new Vue({
     el: '#app'
 });
 
+/**
+ * The flash-message helper
+ * @param message
+ */
 window.flash = function(message) {
     eventBus.$emit('flash-show', message);
 };
