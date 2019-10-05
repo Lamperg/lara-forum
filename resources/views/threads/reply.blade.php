@@ -16,10 +16,12 @@
             </span>
 
                 <div>
-                    <favorite-base
-                        :reply="{{ $reply }}"
-                        url="{{ route('replies.favorite_store', $reply) }}"
-                    ></favorite-base>
+                    @if(auth()->check())
+                        <favorite-base
+                            :reply="{{ $reply }}"
+                            url="{{ route('replies.favorite_store', $reply) }}"
+                        ></favorite-base>
+                    @endif
                 </div>
             </div>
         </div>

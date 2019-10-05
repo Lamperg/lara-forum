@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  *
  * @package App\Traits
  */
-trait RecordsActivity
+trait  RecordsActivity
 {
     /**
      * @return MorphMany
