@@ -7,20 +7,29 @@
 
 <script>
   export default {
-    name: 'FavoriteBase',
-    props: ['reply', 'url'],
+    props: ['reply'],
 
     data() {
       return {
         isFavorited: this.reply.isFavorited,
-        favoritesCount: this.reply.favoritesCount
+        favoritesCount: this.reply.favoritesCount,
       };
     },
 
     computed: {
+      /**
+       * @returns {[string, string]}
+       */
       classes() {
         return ['btn', this.isFavorited ? 'btn-primary' : 'btn-secondary'];
-      }
+      },
+
+      /**
+       * @returns {string}
+       */
+      url() {
+        return `/replies/${this.reply.id}/favorites`;
+      },
     },
 
     methods: {
@@ -41,7 +50,7 @@
           this.isFavorited = false;
           this.favoritesCount--;
         });
-      }
-    }
+      },
+    },
   };
 </script>

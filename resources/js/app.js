@@ -10,6 +10,17 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 /**
+ * Authorization mixin for Vue components
+ * @param handler
+ * @returns {boolean}
+ */
+window.Vue.prototype.authorize = function(handler) {
+    let user = window.App.user;
+
+    return user ? handler(user) : false;
+};
+
+/**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
  * components and automatically register them with their "basename".
@@ -24,15 +35,11 @@ window.Vue = require('vue');
 
 Vue.component(
     'flash-message',
-    require('./components/FlashMessage.vue').default
+    require('./components/FlashMessage.vue').default,
 );
 Vue.component(
-    'reply-base',
-    require('./components/ReplyBase.vue').default
-);
-Vue.component(
-    'favorite-base',
-    require('./components/FavoriteBase.vue').default
+    'thread-view',
+    require('./components/pages/ThreadView.vue').default,
 );
 
 /**
@@ -42,7 +49,7 @@ Vue.component(
  */
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
 });
 
 /**
