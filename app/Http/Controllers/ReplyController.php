@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Reply;
 use App\Models\Thread;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 
 /**
@@ -28,7 +29,7 @@ class ReplyController extends Controller
      * @param        $channel
      * @param Thread $thread
      *
-     * @return RedirectResponse
+     * @return Model|RedirectResponse
      */
     public function store($channel, Thread $thread)
     {
@@ -36,10 +37,14 @@ class ReplyController extends Controller
             'body' => 'required',
         ]);
 
-        $thread->addReply([
+        $reply = $thread->addReply([
             'body' => request('body'),
             'user_id' => $this->getAuthUser()->id,
         ]);
+
+        if (request()->expectsJson()) {
+            return $reply->load('owner');
+        }
 
         return back()
             ->with('flash', __('messages.reply.store'));
