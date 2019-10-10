@@ -17,27 +17,29 @@
     },
 
     computed: {
-      /**
-       * @returns {[string, string]}
-       */
+
       classes() {
         return ['btn', this.isFavorited ? 'btn-primary' : 'btn-secondary'];
       },
 
-      /**
-       * @returns {string}
-       */
       url() {
         return `/replies/${this.reply.id}/favorites`;
       },
     },
 
     methods: {
-
+      /**
+       * Toggles the current state
+       *
+       * @returns {*|void}
+       */
       toggle() {
         return this.isFavorited ? this.unfavorite() : this.favorite();
       },
 
+      /**
+       * Favorite action
+       */
       favorite() {
         axios.post(this.url).then(() => {
           this.isFavorited = true;
@@ -45,6 +47,9 @@
         });
       },
 
+      /**
+       * Unfavorite action
+       */
       unfavorite() {
         axios.delete(this.url).then(() => {
           this.isFavorited = false;

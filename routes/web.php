@@ -26,6 +26,7 @@ Route::prefix('threads/')->name('threads.')->group(function () {
     Route::get('{channel}', 'ThreadController@index')->name('channel_index');
     Route::get('{channel}/{thread}', 'ThreadController@show')->name('show');
     Route::delete('{channel}/{thread}', 'ThreadController@destroy')->name('destroy');
+    Route::get('{channel}/{thread}/replies', 'ReplyController@index')->name('replies_index');
     Route::post('{channel}/{thread}/replies', 'ReplyController@store')->name('replies_store');
 });
 

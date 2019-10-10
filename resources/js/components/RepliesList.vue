@@ -1,40 +1,67 @@
 <template>
     <div>
-        <div v-for="(reply, index) in items">
+        <div v-for="(reply, index) in items" :key="reply.id">
             <reply-view :data="reply" @deleted="remove(index)"></reply-view>
         </div>
 
-        <new-reply-form :endpoint="endpoint" @created="add"></new-reply-form>
+        <paginator-base :dataSet="dataSet" @updated="fetch"></paginator-base>
+
+        <new-reply-form @created="add"></new-reply-form>
     </div>
 </template>
 
 <script>
   import ReplyView from './ReplyView';
   import NewReplyForm from './NewReplyForm';
+  import collection from './mixins/collection';
 
   export default {
-    props: ['data'],
     components: {ReplyView, NewReplyForm},
+    mixins: [collection],
 
     data() {
       return {
-        items: this.data,
-        endpoint: `${location.pathname}/replies`,
+        dataSet: false,
       };
     },
 
-    methods: {
+    created() {
+      this.fetch();
+    },
 
-      add(reply) {
-        this.items.push(reply);
-        this.$emit('added');
+    methods: {
+      /**
+       * Retrieve an api url
+       *
+       * @param page
+       * @return {string}
+       */
+      url(page) {
+        if (!page) {
+          let query = location.search.match(/page=(\d+)/);
+          page = query ? query[1] : 1;
+        }
+
+        return `${location.pathname}/replies?page=${page}`;
       },
 
-      remove(index) {
-        this.items.splice(index, 1);
-        this.$emit('removed');
+      /**
+       * Get the list of replies
+       *
+       * @param page
+       */
+      fetch(page) {
+        axios.get(this.url(page)).then(this.refresh);
+      },
 
-        flash('The reply has been deleted');
+      /**
+       * Update hte current data set
+       *
+       * @param data
+       */
+      refresh({data}) {
+        this.dataSet = data;
+        this.items = data.data;
       },
     },
   };

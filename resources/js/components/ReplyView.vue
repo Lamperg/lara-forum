@@ -5,7 +5,7 @@
                 <span class="flex">
                     <a :href="`'/profiles/${data.owner.name}`"
                        v-text="data.owner.name">
-                    </a> said {{ data.created_at }}...
+                    </a> said <span v-text="ago"></span>
                 </span>
 
                 <div v-if="signedIn">
@@ -32,6 +32,7 @@
     </div>
 </template>
 <script>
+  import moment from 'moment';
   import FavoriteBase from './FavoriteBase';
 
   export default {
@@ -47,23 +48,24 @@
     },
 
     computed: {
-      /**
-       * @returns {*}
-       */
+
+      ago() {
+        return moment(this.data.created_at).fromNow();
+      },
+
       signedIn() {
         return !!window.App.signedIn;
       },
 
-      /**
-       * @returns {boolean}
-       */
       canUpdate() {
         return this.authorize(user => this.data.user_id === user.id);
       },
     },
 
     methods: {
-
+      /**
+       * Updates the current reply
+       */
       update() {
         axios.patch(`/replies/${this.data.id}`, {
           body: this.body,
@@ -74,6 +76,9 @@
         });
       },
 
+      /**
+       * Removed the current reply
+       */
       destroy() {
         axios.delete(`/replies/${this.data.id}`).then(() => {
           this.$emit('deleted', this.data.id);

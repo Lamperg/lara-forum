@@ -34,6 +34,10 @@ window.Vue.prototype.authorize = function(handler) {
 // files(key).default));
 
 Vue.component(
+    'paginator-base',
+    require('./components/PaginatorBase').default,
+);
+Vue.component(
     'flash-message',
     require('./components/FlashMessage.vue').default,
 );

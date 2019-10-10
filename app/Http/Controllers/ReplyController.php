@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Channel;
 use App\Models\Reply;
 use App\Models\Thread;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 
@@ -20,7 +22,20 @@ class ReplyController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth', ['except' => 'index']);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Channel $channel
+     * @param Thread  $thread
+     *
+     * @return LengthAwarePaginator
+     */
+    public function index(Channel $channel, Thread $thread)
+    {
+        return $thread->replies()->paginate(20);
     }
 
     /**
