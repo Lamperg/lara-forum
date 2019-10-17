@@ -25,7 +25,24 @@ class Reply extends Model
 {
     use Favoritable, RecordsActivity;
 
+    const PAGINATION_ITEMS = 10;
     const STATE_CREATED = 'created_reply';
+
+    /**
+     * {@inheritDoc}
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function (Reply $reply) {
+            $reply->thread->increment('replies_count');
+        });
+
+        static::deleted(function (Reply $reply) {
+            $reply->thread->decrement('replies_count');
+        });
+    }
 
     /**
      * {@inheritDoc}

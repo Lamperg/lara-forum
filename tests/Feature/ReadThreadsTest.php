@@ -51,21 +51,6 @@ class ReadThreadsTest extends TestCase
     /**
      * @test
      */
-    public function user_can_read_replies_that_are_associated_with_thread()
-    {
-        /** @var Reply $reply */
-        $reply = factory(Reply::class)->create([
-            'thread_id' => $this->thread->id,
-        ]);
-
-        $this
-            ->get($this->thread->path())
-            ->assertSee($reply->body);
-    }
-
-    /**
-     * @test
-     */
     public function user_can_filter_threads_according_to_a_channel()
     {
         /** @var Channel $channel */
@@ -126,13 +111,34 @@ class ReadThreadsTest extends TestCase
     /**
      * @test
      */
+    public function user_can_filter_threads_by_those_that_are_unanswered()
+    {
+        /** @var Thread $thread */
+        $thread = create(Thread::class);
+        /** @var Reply $reply */
+        $reply = create(Reply::class, ['thread_id' => $thread->id]);
+
+        $response = $this->getJson('threads?unanswered=1')->json();
+
+        $this->assertCount(1, $response);
+    }
+
+    /**
+     * @test
+     */
     public function user_can_request_all_replies_for_given_thread()
     {
-        create(Reply::class, ['thread_id' => $this->thread->id], 2);
+        $twoPageItemsCount = Reply::PAGINATION_ITEMS + 1;
+
+        create(
+            Reply::class,
+            ['thread_id' => $this->thread->id],
+            $twoPageItemsCount
+        );
 
         $response = $this->getJson("{$this->thread->path()}/replies")->json();
 
-        $this->assertCount(1, $response['data']);
-        $this->assertEquals(2, $response['total']);
+        $this->assertCount(Reply::PAGINATION_ITEMS, $response['data']);
+        $this->assertEquals($twoPageItemsCount, $response['total']);
     }
 }

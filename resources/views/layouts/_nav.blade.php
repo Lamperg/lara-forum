@@ -26,6 +26,7 @@
                         @endauth
 
                         <a class="dropdown-item" href="{{ route('threads.index', ['popular' => 1]) }}">Popular All Time</a>
+                        <a class="dropdown-item" href="{{ route('threads.index', ['unanswered' => 1]) }}">Unanswered Threads</a>
                     </div>
                 </li>
                 <li class="nav-item">
