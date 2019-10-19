@@ -14,16 +14,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class Thread
  *
- * @property integer            $id
- * @property string             $title
- * @property string             $body
- * @property Carbon|string      $created_at
- * @property Carbon|string      $updated_at
- * @property string             $user_id
- * @property Collection|Reply[] $replies
- * @property User               $owner
- * @property Channel            $channel
- * @property int                $replies_count
+ * @property integer                         $id
+ * @property string                          $title
+ * @property string                          $body
+ * @property Carbon|string                   $created_at
+ * @property Carbon|string                   $updated_at
+ * @property string                          $user_id
+ * @property Collection|Reply[]              $replies
+ * @property User                            $owner
+ * @property Channel                         $channel
+ * @property Collection|ThreadSubscription[] $subscriptions
+ * @property integer                         $replies_count
  *
  * @method static Builder|Thread filter(Filters $filters)
  *
@@ -85,6 +86,14 @@ class Thread extends Model
     }
 
     /**
+     * @return HasMany
+     */
+    public function subscriptions()
+    {
+        return $this->hasMany(ThreadSubscription::class);
+    }
+
+    /**
      * The path to the thread.
      *
      * @return string
@@ -113,5 +122,27 @@ class Thread extends Model
     public function scopeFilter(Builder $query, Filters $filters)
     {
         return $filters->apply($query);
+    }
+
+    /**
+     * @param null $userId
+     *
+     * @return Model
+     */
+    public function subscribe($userId = null)
+    {
+        return $this->subscriptions()->create([
+            'user_id' => $userId ?? auth()->id()
+        ]);
+    }
+
+    /**
+     * @param null $userId
+     */
+    public function unsubscribe($userId = null)
+    {
+        $this->subscriptions()
+            ->where('user_id', $userId ?? auth()->id())
+            ->delete();
     }
 }
