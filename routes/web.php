@@ -28,6 +28,7 @@ Route::prefix('threads/')->name('threads.')->group(function () {
     Route::delete('{channel}/{thread}', 'ThreadController@destroy')->name('destroy');
     Route::get('{channel}/{thread}/replies', 'ReplyController@index')->name('replies_index');
     Route::post('{channel}/{thread}/replies', 'ReplyController@store')->name('replies_store');
+    Route::post('{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@store')->name('subscriptions_store');
 });
 
 Route::prefix('replies/')->name('replies.')->group(function () {
