@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -20,6 +21,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property Carbon|string         $updated_at
  * @property Collection|Thread[]   $threads
  * @property Collection|Activity[] $activity
+ * @property Collection|DatabaseNotification[] $notifications
+ * @property Collection|DatabaseNotification[] $unreadNotifications
  *
  * @package App\Models
  * @mixin \Eloquent

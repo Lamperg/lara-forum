@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\ThreadWasUpdated;
 use App\Traits\RecordsActivity;
 use Carbon\Carbon;
 use App\Filters\Filters;
@@ -117,7 +118,15 @@ class Thread extends Model
      */
     public function addReply($reply)
     {
-        return $this->replies()->create($reply);
+        $reply = $this->replies()->create($reply);
+
+        // prepare notifications for all subscribers.
+        $this->subscriptions
+            ->filter(function (ThreadSubscription $sub) use ($reply) {
+                return (int) $sub->user_id !== (int) $reply->user_id;
+            })->each->notify($reply);
+
+        return $reply;
     }
 
     /**
@@ -134,13 +143,15 @@ class Thread extends Model
     /**
      * @param null $userId
      *
-     * @return Model
+     * @return $this
      */
     public function subscribe($userId = null)
     {
-        return $this->subscriptions()->create([
+        $this->subscriptions()->create([
             'user_id' => $userId ?? auth()->id()
         ]);
+
+        return $this;
     }
 
     /**
