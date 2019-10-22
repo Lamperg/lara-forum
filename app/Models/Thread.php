@@ -25,6 +25,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Channel                         $channel
  * @property Collection|ThreadSubscription[] $subscriptions
  * @property integer                         $replies_count
+ * @property bool                            $isSubscribedTo
+ *
  *
  * @method static Builder|Thread filter(Filters $filters)
  *
@@ -46,6 +48,11 @@ class Thread extends Model
      * {@inheritDoc}
      */
     protected $with = ['owner', 'channel'];
+
+    /**
+     * {@inheritDoc}
+     */
+    protected $appends = ['isSubscribedTo'];
 
     /**
      * {@inheritDoc}
@@ -144,5 +151,15 @@ class Thread extends Model
         $this->subscriptions()
             ->where('user_id', $userId ?? auth()->id())
             ->delete();
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsSubscribedToAttribute()
+    {
+        return $this->subscriptions()
+            ->where('user_id', auth()->id())
+            ->exists();
     }
 }
