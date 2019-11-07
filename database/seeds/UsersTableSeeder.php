@@ -12,11 +12,18 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        // create initial user
+        // create first user
         factory(User::class)->create([
-            'name' => env('INITIAL_USER_NAME'),
-            'email' => env('INITIAL_USER_EMAIL'),
-            'password' => bcrypt(env('INITIAL_USER_PASSWORD')),
+            'name' => env('FIRST_USER_NAME'),
+            'email' => env('FIRST_USER_EMAIL'),
+            'password' => bcrypt(env('FIRST_USER_PASSWORD')),
+        ]);
+
+        // create second user
+        factory(User::class)->create([
+            'name' => env('SECOND_USER_NAME'),
+            'email' => env('SECOND_USER_EMAIL'),
+            'password' => bcrypt(env('FIRST_USER_PASSWORD')),
         ]);
     }
 }
