@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\ThreadHasNewReply;
 use App\Notifications\ThreadWasUpdated;
 use App\Traits\RecordsActivity;
 use Carbon\Carbon;
@@ -120,11 +121,7 @@ class Thread extends Model
     {
         $reply = $this->replies()->create($reply);
 
-        // prepare notifications for all subscribers.
-        $this->subscriptions
-            ->filter(function (ThreadSubscription $sub) use ($reply) {
-                return (int) $sub->user_id !== (int) $reply->user_id;
-            })->each->notify($reply);
+        event(new ThreadHasNewReply($this, $reply));
 
         return $reply;
     }
