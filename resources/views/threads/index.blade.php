@@ -14,7 +14,13 @@
                         <div class="card-header">
                             <div class="level">
                                 <h4 class="flex">
-                                    <a href="{{ $thread->path() }}">{{ $thread->title }}</a>
+                                    <a href="{{ $thread->path() }}"
+                                       @auth()
+                                       class="{{ $thread->hasUpdatesFor(auth()->user()) ?: "text-secondary" }}"
+                                        @endauth
+                                    >
+                                        {{ $thread->title }}
+                                    </a>
                                 </h4>
 
                                 <a href="{{ $thread->path() }}">

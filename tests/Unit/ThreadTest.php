@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Notifications\ThreadWasUpdated;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 use App\Models\User;
@@ -131,5 +132,20 @@ class ThreadTest extends TestCase
         $this->assertFalse($this->thread->isSubscribedTo);
         $this->thread->subscribe();
         $this->assertTrue($this->thread->isSubscribedTo);
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function can_check_if_auth_user_has_read_all_replies()
+    {
+        $user = $this->signIn();
+
+        $this->assertTrue($this->thread->hasUpdatesFor($user));
+
+        $user->read($this->thread);
+
+        $this->assertFalse($this->thread->hasUpdatesFor($user));
     }
 }

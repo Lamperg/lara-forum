@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Thread;
 use App\Models\Channel;
+use Carbon\Carbon;
 use Illuminate\Http\Response;
 use App\Filters\ThreadFilters;
 use Illuminate\Database\Eloquent\Collection;
@@ -87,9 +88,14 @@ class ThreadController extends Controller
      * @param Thread $thread
      *
      * @return Response
+     * @throws \Exception
      */
     public function show($channel, Thread $thread)
     {
+        if ($user = $this->getAuthUser()) {
+            $user->read($thread);
+        }
+
         return view('threads.show', compact('thread'));
     }
 

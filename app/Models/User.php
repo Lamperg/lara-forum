@@ -13,14 +13,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 /**
  * Class User
  *
- * @property integer               $id
- * @property string                $name
- * @property string                $email
- * @property string                $password
- * @property Carbon|string         $created_at
- * @property Carbon|string         $updated_at
- * @property Collection|Thread[]   $threads
- * @property Collection|Activity[] $activity
+ * @property integer                           $id
+ * @property string                            $name
+ * @property string                            $email
+ * @property string                            $password
+ * @property Carbon|string                     $created_at
+ * @property Carbon|string                     $updated_at
+ * @property Collection|Thread[]               $threads
+ * @property Collection|Activity[]             $activity
  * @property Collection|DatabaseNotification[] $notifications
  * @property Collection|DatabaseNotification[] $unreadNotifications
  *
@@ -84,5 +84,28 @@ class User extends Authenticatable
     public function activity()
     {
         return $this->hasMany(Activity::class);
+    }
+
+    /**
+     * @param Thread $thread
+     *
+     * @throws \Exception
+     */
+    public function read(Thread $thread)
+    {
+        cache()->forever(
+            $this->visitedThreadCacheKey($thread),
+            Carbon::now()
+        );
+    }
+
+    /**
+     * @param Thread $thread
+     *
+     * @return string
+     */
+    public function visitedThreadCacheKey(Thread $thread)
+    {
+        return sprintf("users.%s.visits.%s", $this->id, $thread->id);
     }
 }
