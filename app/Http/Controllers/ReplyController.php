@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Channel;
 use App\Models\Reply;
 use App\Models\Thread;
+use App\Utilities\Spam;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
 
 /**
  * Class ReplyController
@@ -45,12 +47,15 @@ class ReplyController extends Controller
      * @param Thread $thread
      *
      * @return Model|RedirectResponse
+     * @throws \Exception
      */
-    public function store($channel, Thread $thread)
+    public function store($channel, Thread $thread, Spam $spam)
     {
         request()->validate([
             'body' => 'required',
         ]);
+
+        $spam->detect(request('body'));
 
         $reply = $thread->addReply([
             'body' => request('body'),
