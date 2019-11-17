@@ -73,11 +73,15 @@ class ReplyController extends Controller
     /**
      * @param Reply $reply
      *
+     * @param Spam  $spam
+     *
      * @throws AuthorizationException
+     * @throws \Exception
      */
-    public function update(Reply $reply)
+    public function update(Reply $reply, Spam $spam)
     {
         $this->authorize('update', $reply);
+        $spam->detect(request('body'));
 
         $reply->update([
             'body' => request('body'),
