@@ -35,19 +35,19 @@ window.Vue.prototype.authorize = function(handler) {
 
 Vue.component(
     'paginator-base',
-    require('./components/PaginatorBase').default,
+    require('./components/PaginatorBase').default
 );
 Vue.component(
     'flash-message',
-    require('./components/FlashMessage.vue').default,
+    require('./components/FlashMessage.vue').default
 );
 Vue.component(
     'thread-view',
-    require('./components/pages/ThreadView.vue').default,
+    require('./components/pages/ThreadView.vue').default
 );
 Vue.component(
     'user-notifications',
-    require('./components/UserNotifications.vue').default,
+    require('./components/UserNotifications.vue').default
 );
 
 /**
@@ -57,13 +57,14 @@ Vue.component(
  */
 
 const app = new Vue({
-    el: '#app',
+    el: '#app'
 });
 
 /**
  * The flash-message helper
  * @param message
+ * @param level
  */
-window.flash = function(message) {
-    eventBus.$emit('flash-show', message);
+window.flash = function(message, level = 'success') {
+    eventBus.$emit('flash-show', {message, level});
 };

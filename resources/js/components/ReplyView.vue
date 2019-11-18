@@ -43,7 +43,7 @@
       return {
         editing: false,
         id: this.data.id,
-        body: this.data.body,
+        body: this.data.body
       };
     },
 
@@ -59,7 +59,7 @@
 
       canUpdate() {
         return this.authorize(user => this.data.user_id === user.id);
-      },
+      }
     },
 
     methods: {
@@ -68,11 +68,12 @@
        */
       update() {
         axios.patch(`/replies/${this.data.id}`, {
-          body: this.body,
+          body: this.body
         }).then(() => {
           this.editing = false;
-
           flash('The reply has been updated');
+        }).catch(error => {
+          flash(error.response.data, 'danger');
         });
       },
 
@@ -83,7 +84,7 @@
         axios.delete(`/replies/${this.data.id}`).then(() => {
           this.$emit('deleted', this.data.id);
         });
-      },
-    },
+      }
+    }
   };
 </script>

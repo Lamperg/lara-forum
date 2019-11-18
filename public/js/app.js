@@ -1774,13 +1774,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['message'],
   data: function data() {
     return {
       body: '',
-      show: false
+      show: false,
+      level: 'success'
     };
   },
   created: function created() {
@@ -1790,14 +1795,15 @@ __webpack_require__.r(__webpack_exports__);
       this.flash(this.message);
     }
 
-    _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('flash-show', function (message) {
-      return _this.flash(message);
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('flash-show', function (data) {
+      return _this.flash(data);
     });
   },
   methods: {
-    flash: function flash(message) {
+    flash: function flash(data) {
       this.show = true;
-      this.body = message;
+      this.level = data.level;
+      this.body = data.message;
       this.hide();
     },
     hide: function hide() {
@@ -1881,6 +1887,8 @@ __webpack_require__.r(__webpack_exports__);
         flash('Your reply has been posted.');
 
         _this.$emit('created', response.data);
+      })["catch"](function (error) {
+        flash(error.response.data, 'danger');
       });
     }
   }
@@ -2136,6 +2144,8 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function () {
         _this2.editing = false;
         flash('The reply has been updated');
+      })["catch"](function (error) {
+        flash(error.response.data, 'danger');
       });
     },
 
@@ -55882,9 +55892,10 @@ var render = function() {
         { name: "show", rawName: "v-show", value: _vm.show, expression: "show" }
       ],
       staticClass: "alert alert-success alert-flash",
+      class: "alert-" + _vm.level,
       attrs: { role: "alert" }
     },
-    [_c("strong", [_vm._v("Success!")]), _vm._v(" " + _vm._s(_vm.body) + "\n")]
+    [_vm._v("\n    " + _vm._s(_vm.body) + "\n")]
   )
 }
 var staticRenderFns = []
@@ -68558,10 +68569,15 @@ var app = new Vue({
 /**
  * The flash-message helper
  * @param message
+ * @param level
  */
 
 window.flash = function (message) {
-  _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('flash-show', message);
+  var level = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'success';
+  _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('flash-show', {
+    message: message,
+    level: level
+  });
 };
 
 /***/ }),

@@ -8,8 +8,10 @@ use App\Models\Thread;
 use App\Inspections\Spam;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 
 /**
@@ -45,29 +47,32 @@ class ReplyController extends Controller
      *
      * @param        $channel
      * @param Thread $thread
+     * @param Spam   $spam
      *
-     * @return Model|RedirectResponse
-     * @throws \Exception
+     * @return Model
      */
     public function store($channel, Thread $thread, Spam $spam)
     {
-        request()->validate([
-            'body' => 'required',
-        ]);
+        try {
+            request()->validate([
+                'body' => 'required',
+            ]);
 
-        $spam->detect(request('body'));
+            $spam->detect(request('body'));
 
-        $reply = $thread->addReply([
-            'body' => request('body'),
-            'user_id' => $this->getAuthUser()->id,
-        ]);
+            $reply = $thread->addReply([
+                'body' => request('body'),
+                'user_id' => $this->getAuthUser()->id,
+            ]);
 
-        if (request()->expectsJson()) {
-            return $reply->load('owner');
+            if (request()->expectsJson()) {
+                return $reply->load('owner');
+            }
+        } catch (\Exception $e) {
+            return response(__('messages.reply.store_error'), 422);
         }
 
-        return back()
-            ->with('flash', __('messages.reply.store'));
+
     }
 
     /**
@@ -75,17 +80,23 @@ class ReplyController extends Controller
      *
      * @param Spam  $spam
      *
+     * @return ResponseFactory|Response
      * @throws AuthorizationException
      * @throws \Exception
      */
     public function update(Reply $reply, Spam $spam)
     {
         $this->authorize('update', $reply);
-        $spam->detect(request('body'));
 
-        $reply->update([
-            'body' => request('body'),
-        ]);
+        try {
+            $spam->detect(request('body'));
+
+            $reply->update([
+                'body' => request('body'),
+            ]);
+        } catch (\Exception $e) {
+            return response(__('messages.reply.store_error'), 422);
+        }
     }
 
     /**

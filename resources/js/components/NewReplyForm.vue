@@ -34,7 +34,7 @@
   export default {
     data() {
       return {
-        body: '',
+        body: ''
       };
     },
 
@@ -45,7 +45,7 @@
        */
       signedIn() {
         return !!window.App.signedIn;
-      },
+      }
     },
 
     methods: {
@@ -53,13 +53,16 @@
        * Adds a new reply
        */
       addReply() {
-        axios.post(`${location.pathname}/replies`, {body: this.body})
-            .then((response) => {
+        axios.post(`${location.pathname}/replies`, {body: this.body}).
+            then((response) => {
               this.body = '';
               flash('Your reply has been posted.');
               this.$emit('created', response.data);
+            }).
+            catch(error => {
+              flash(error.response.data, 'danger');
             });
-      },
-    },
+      }
+    }
   };
 </script>
