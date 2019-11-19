@@ -6,6 +6,7 @@ use App\Models\Channel;
 use App\Models\Reply;
 use App\Models\Thread;
 use App\Inspections\Spam;
+use App\Rules\SpamFree;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -47,18 +48,15 @@ class ReplyController extends Controller
      *
      * @param        $channel
      * @param Thread $thread
-     * @param Spam   $spam
      *
      * @return Model
      */
-    public function store($channel, Thread $thread, Spam $spam)
+    public function store($channel, Thread $thread)
     {
         try {
             request()->validate([
-                'body' => 'required',
+                'body' => ['required', resolve(SpamFree::class)],
             ]);
-
-            $spam->detect(request('body'));
 
             $reply = $thread->addReply([
                 'body' => request('body'),
