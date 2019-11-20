@@ -140,7 +140,7 @@ class ParticipateInForumTest extends TestCase
         ]);
 
         $this->expectException(\Exception::class);
-        $this->post("{$thread->path()}/replies", $reply->toArray())
+        $this->json("{$thread->path()}/replies", $reply->toArray())
             ->assertStatus(422);
     }
 
@@ -158,9 +158,9 @@ class ParticipateInForumTest extends TestCase
         ]);
 
         $this->post("{$thread->path()}/replies", $reply->toArray())
-            ->assertOk();
+            ->assertStatus(201);
 
         $this->post("{$thread->path()}/replies", $reply->toArray())
-            ->assertStatus(422);
+            ->assertStatus(429);
     }
 }

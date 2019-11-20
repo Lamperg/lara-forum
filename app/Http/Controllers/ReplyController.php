@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePostRequest;
 use App\Models\Channel;
 use App\Models\Reply;
 use App\Models\Thread;
@@ -47,33 +48,19 @@ class ReplyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param        $channel
-     * @param Thread $thread
+     * @param                                         $channel
+     * @param Thread                                  $thread
+     *
+     * @param CreatePostRequest $request
      *
      * @return Model
      */
-    public function store($channel, Thread $thread)
+    public function store($channel, Thread $thread, CreatePostRequest $request)
     {
-        if (Gate::denies('create', resolve(Reply::class))) {
-            return response(__('messages.reply.store_break'), 422);
-        }
-
-        request()->validate([
-            'body' => ['required', resolve(SpamFree::class)],
-        ]);
-
-        try {
-            $reply = $thread->addReply([
-                'body' => request('body'),
-                'user_id' => $this->getAuthUser()->id,
-            ]);
-
-            if (request()->expectsJson()) {
-                return $reply->load('owner');
-            }
-        } catch (\Exception $e) {
-            return response(__('messages.reply.store_error'), 422);
-        }
+        return $thread->addReply([
+            'body' => $request->get('body'),
+            'user_id' => $this->getAuthUser()->id,
+        ])->load('owner');
     }
 
     /**
