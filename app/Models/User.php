@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -17,6 +18,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string                            $name
  * @property string                            $email
  * @property string                            $password
+ * @property Reply                             $lastReply
  * @property Carbon|string                     $created_at
  * @property Carbon|string                     $updated_at
  * @property Collection|Thread[]               $threads
@@ -84,6 +86,14 @@ class User extends Authenticatable
     public function activity()
     {
         return $this->hasMany(Activity::class);
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function lastReply()
+    {
+        return $this->hasOne(Reply::class)->latest();
     }
 
     /**

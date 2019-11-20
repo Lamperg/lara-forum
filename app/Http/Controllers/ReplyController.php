@@ -13,6 +13,7 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
 /**
@@ -53,6 +54,10 @@ class ReplyController extends Controller
      */
     public function store($channel, Thread $thread)
     {
+        if (Gate::denies('create', resolve(Reply::class))) {
+            return response(__('messages.reply.store_break'), 422);
+        }
+
         request()->validate([
             'body' => ['required', resolve(SpamFree::class)],
         ]);
@@ -69,8 +74,6 @@ class ReplyController extends Controller
         } catch (\Exception $e) {
             return response(__('messages.reply.store_error'), 422);
         }
-
-
     }
 
     /**

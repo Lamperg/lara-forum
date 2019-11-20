@@ -140,8 +140,27 @@ class ParticipateInForumTest extends TestCase
         ]);
 
         $this->expectException(\Exception::class);
-        $this
-            ->post("{$thread->path()}/replies", $reply->toArray())
+        $this->post("{$thread->path()}/replies", $reply->toArray())
+            ->assertStatus(422);
+    }
+
+    /**
+     * @test
+     */
+    public function users_may_only_reply_a_maximum_of_once_per_minute()
+    {
+        $this->signIn();
+        /** @var Thread $thread */
+        $thread = create(Thread::class);
+        /** @var Reply $reply */
+        $reply = make(Reply::class, [
+            'body' => 'My simple reply',
+        ]);
+
+        $this->post("{$thread->path()}/replies", $reply->toArray())
+            ->assertOk();
+
+        $this->post("{$thread->path()}/replies", $reply->toArray())
             ->assertStatus(422);
     }
 }

@@ -22,4 +22,20 @@ class ReplyPolicy
     {
         return $user->is($reply->owner);
     }
+
+    /**
+     * Determine whether the user can create the reply.
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function create(User $user)
+    {
+        if (!$lastReply = $user->fresh()->lastReply) {
+            return true;
+        }
+
+        return !$lastReply->wasJustPublished();
+    }
 }
