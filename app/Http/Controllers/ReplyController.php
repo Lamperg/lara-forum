@@ -53,11 +53,11 @@ class ReplyController extends Controller
      */
     public function store($channel, Thread $thread)
     {
-        try {
-            request()->validate([
-                'body' => ['required', resolve(SpamFree::class)],
-            ]);
+        request()->validate([
+            'body' => ['required', resolve(SpamFree::class)],
+        ]);
 
+        try {
             $reply = $thread->addReply([
                 'body' => request('body'),
                 'user_id' => $this->getAuthUser()->id,
