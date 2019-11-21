@@ -7,6 +7,8 @@ use App\Models\Channel;
 use App\Models\Reply;
 use App\Models\Thread;
 use App\Inspections\Spam;
+use App\Models\User;
+use App\Notifications\YouWereMentioned;
 use App\Rules\SpamFree;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -51,16 +53,29 @@ class ReplyController extends Controller
      * @param                                         $channel
      * @param Thread                                  $thread
      *
-     * @param CreatePostRequest $request
+     * @param CreatePostRequest                       $request
      *
      * @return Model
      */
     public function store($channel, Thread $thread, CreatePostRequest $request)
     {
-        return $thread->addReply([
+        /** @var Reply $reply */
+        $reply = $thread->addReply([
             'body' => $request->get('body'),
             'user_id' => $this->getAuthUser()->id,
-        ])->load('owner');
+        ]);
+
+        preg_match_all('/\@([^\s\.]+)/', $reply->body, $matches);
+
+        foreach ($matches[1] as $name) {
+            $user = User::where('name', $name)->first();
+
+            if ($user) {
+                $user->notify(new YouWereMentioned($reply));
+            }
+        }
+
+        return $reply->load('owner');
     }
 
     /**
