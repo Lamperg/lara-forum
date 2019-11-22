@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-cd ../..
+cd ../../
 docker-compose stop
-docker-sync stop
+#docker-sync stop

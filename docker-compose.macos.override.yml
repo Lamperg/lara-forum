@@ -5,29 +5,28 @@ services:
   #=============================================================================
   app:
     build:
-      context: ./.docker
-      dockerfile: app/Dockerfile
-      args:
-        - APP_PHP_VERSION=${PHP_VERSION}
-        - APP_NODE_JS_VERSION=${NODE_JS_VERSION}
+      context: ""
+      dockerfile: ../.docker/app/Dockerfile
     networks:
-      - app-network
+      - lara-forum-network
     volumes:
-      - ./src:/var/www
+      - lara-forum-sync:/var/www:nocopy
       - ./.docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
 
   # NGINX Server
   #=============================================================================
   webserver:
     image: nginx:alpine
+    ports:
+      - "8000:80"
     links:
       - app
     depends_on:
       - app
     networks:
-      - app-network
+      - lara-forum-network
     volumes:
-      - ./src:/var/www
+      - lara-forum-sync:/var/www:nocopy
       - ./.docker/nginx/conf.d/:/etc/nginx/conf.d/
 
   # DATABASE
@@ -46,16 +45,18 @@ services:
       - db-data:/var/lib/mysql
       - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
     networks:
-      - app-network
+      - lara-forum-network
 
 # DOCKER NETWORKS
 #===============================================================================
 networks:
-  app-network:
+  lara-forum-network:
     driver: bridge
 
 # DOCKER VOLUMES
 #===============================================================================
 volumes:
+  lara-forum-sync:
+    external: true
   db-data:
     driver: local

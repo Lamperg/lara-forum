@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 cd ../..
 docker-compose stop
-docker-sync stop
 docker-compose down -v
-docker-sync clean
+
+#docker-sync stop
+#docker-sync clean

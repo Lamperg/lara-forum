@@ -1,4 +1,11 @@
-FROM php:7.3-fpm
+ARG APP_PHP_VERSION
+
+FROM php:${APP_PHP_VERSION}-fpm
+
+ARG APP_NODE_JS_VERSION
+
+# Set container description
+LABEL Description="Application container"
 
 # Set working directory
 WORKDIR /var/www
@@ -6,7 +13,7 @@ WORKDIR /var/www
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
-    mysql-client \
+    mariadb-client \
     libpng-dev \
     libzip-dev \
     libjpeg62-turbo-dev \
@@ -40,21 +47,18 @@ RUN docker-php-ext-install gd
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install nodejs/npm
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
-RUN apt-get install -y nodejs npm
+RUN curl -sL https://deb.nodesource.com/setup_${APP_NODE_JS_VERSION}.x | bash -
+RUN apt-get -y install nodejs
 
 # Add user for laravel application
 RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
-# Copy existing application directory contents
-COPY . /var/www
-
 # Copy existing application directory permissions
 COPY --chown=www:www . /var/www
 
 # Change current user to www
-USER www-data
+USER www
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
