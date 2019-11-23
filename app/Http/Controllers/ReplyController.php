@@ -7,17 +7,12 @@ use App\Models\Channel;
 use App\Models\Reply;
 use App\Models\Thread;
 use App\Inspections\Spam;
-use App\Models\User;
-use App\Notifications\YouWereMentioned;
-use App\Rules\SpamFree;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Str;
 
 /**
  * Class ReplyController
@@ -78,15 +73,11 @@ class ReplyController extends Controller
     {
         $this->authorize('update', $reply);
 
-        try {
-            $spam->detect(request('body'));
+        $spam->detect(request('body'));
 
-            $reply->update([
-                'body' => request('body'),
-            ]);
-        } catch (\Exception $e) {
-            return response(__('messages.reply.store_error'), 422);
-        }
+        $reply->update([
+            'body' => request('body'),
+        ]);
     }
 
     /**
