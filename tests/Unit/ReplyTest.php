@@ -35,4 +35,20 @@ class ReplyTest extends TestCase
         $reply->created_at = Carbon::now()->subMonth();
         $this->assertFalse($reply->wasJustPublished());
     }
+
+    /**
+     * @test
+     */
+    public function it_wraps_mentioned_usernames_in_the_body_within_anchor_tags()
+    {
+        /** @var Reply $reply */
+        $reply = create(Reply::class, [
+            'body' => 'Hello @JaneDoe.',
+        ]);
+
+        $this->assertEquals(
+            'Hello <a href="/profiles/JaneDoe">@JaneDoe</a>.',
+            $reply->body
+        );
+    }
 }
