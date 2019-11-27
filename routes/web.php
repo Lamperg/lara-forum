@@ -43,3 +43,5 @@ Route::prefix('replies/')->name('replies.')->group(function () {
 Route::get('profiles/{user}', 'ProfileController@show')->name('profiles.show');
 Route::get('profiles/{user}/notifications', 'UserNotificationsController@index')->name('profiles.notifications_index');
 Route::delete('profiles/{user}/notifications/{notification}', 'UserNotificationsController@destroy')->name('profiles.notifications_destroy');
+
+Route::get('/api/users', 'Api\UserController@index');
