@@ -1,14 +1,13 @@
 ARG APP_PHP_VERSION
 
+# App image
 FROM php:${APP_PHP_VERSION}-fpm
 
+ARG APP_NAME
 ARG APP_NODE_JS_VERSION
 
-# Set container description
-LABEL Description="Application container"
-
 # Set working directory
-WORKDIR /var/www
+WORKDIR /var/www/${APP_NAME}
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
@@ -55,7 +54,7 @@ RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
 # Copy existing application directory permissions
-COPY --chown=www:www . /var/www
+COPY --chown=www:www . /var/www/${APP_NAME}
 
 # Change current user to www
 USER www
