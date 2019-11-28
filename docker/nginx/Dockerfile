@@ -11,5 +11,5 @@ COPY nginx/entrypoint.sh /nginx-entrypoint.sh
 ENTRYPOINT ["/nginx-entrypoint.sh"]
 
 # Expose public port and start nginx service
-EXPOSE 80
+EXPOSE 80 8000
 CMD ["nginx", "-g", "daemon off;"]
