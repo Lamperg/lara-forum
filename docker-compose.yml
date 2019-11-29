@@ -43,10 +43,10 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_USER: lara-forum
-      MYSQL_PASSWORD: secret
-      MYSQL_DATABASE: lara-forum
+      MYSQL_USER: ${DB_USER}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     volumes:
       - db-data:/var/lib/mysql
       - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
