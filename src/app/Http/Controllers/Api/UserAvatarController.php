@@ -3,10 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 
+/**
+ * Class UserAvatarController
+ *
+ * @package App\Http\Controllers\Api
+ */
 class UserAvatarController extends Controller
 {
     /**
@@ -17,14 +22,19 @@ class UserAvatarController extends Controller
         $this->middleware('auth');
     }
 
-    public function store(User $user)
+    /**
+     * @return RedirectResponse
+     */
+    public function store()
     {
         request()->validate([
             'avatar' => ['required', 'image'],
         ]);
 
-        $user->update([
-            'avatar_path' => \request()->file('avatar')->storeAs('avatars', 'avatar.jpg', 'public'),
+        $this->getAuthUser()->update([
+            'avatar_path' => \request()->file('avatar')->store('avatars', 'public'),
         ]);
+
+        return back();
     }
 }

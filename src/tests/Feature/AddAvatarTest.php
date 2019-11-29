@@ -45,12 +45,14 @@ class AddAvatarTest extends TestCase
         $user = $this->signIn();
 
         Storage::fake('public');
+        $file = UploadedFile::fake()->image('avatar.jpeg');
+        $avatarPath = 'avatars/' . $file->hashName();
 
-        $this->postJson(route('api.avatar_store', [
-            'user' => $user,
-            'avatar' => UploadedFile::fake()->image('avatar.jpg'),
-        ]));
+        $this->postJson("api/users/{$user->id}/avatar", [
+            'avatar' => $file,
+        ]);
 
-        Storage::disk('public')->assertExists('avatars/avatar.jpg');
+        Storage::disk('public')->assertExists($avatarPath);
+        $this->assertEquals($avatarPath, $user->avatar_path);
     }
 }
