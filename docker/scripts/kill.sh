@@ -1,9 +1,24 @@
 #!/usr/bin/env bash
-cd ../..
 
-docker-sync stop
-docker-sync clean
+source ./_config.sh
+cd ${DOCKER_ROOT_DIR}
 
-cd docker/scripts/
-docker-compose stop
-docker-compose down -v
+# Detect OS
+#=============================================================================
+if is_mac; then
+    # OSX
+    #=========================================================================
+    docker-sync stop
+    docker-sync clean
+    docker-compose stop
+    docker-compose down -v
+elif is_linux; then
+    # Linux
+    #=========================================================================
+    docker-compose stop
+    docker-compose down -v
+else
+    # Unsupported OS
+    #=========================================================================
+    error "Your os is not supported"
+fi

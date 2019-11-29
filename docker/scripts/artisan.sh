@@ -1,3 +1,6 @@
 #!/usr/bin/env bash
-cd ../../
+
+source _config.sh
+cd ${DOCKER_ROOT_DIR}
+
 docker-compose exec --user www app php artisan $@

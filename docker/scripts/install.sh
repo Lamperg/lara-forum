@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
-bash ./start.sh --build
 
-#bash ./composer.sh install
-#bash ./npm.sh install
+source ./_config.sh
+cd ${DOCKER_SCRIPTS_DIR}
 
-#bash ./artisan.sh migrate --seed
+# Build container (you can use '--no-cache' and '--force-recreate' params)
+#=============================================================================
+bash ./start.sh --build $@
 
-bash ./get-container-ip.sh
+# Install dependencies
+#=============================================================================
+bash ./composer.sh install
+bash ./npm.sh install
+bash ./artisan.sh migrate --seed
 
-#docker-compose build --no-cache
-#docker-compose up -d --force-recreate
-
-#cd ../../
-#DOCKER_DIR=`pwd`
-#
-#echo ${DOCKER_DIR}
+# Show current container IP
+#=============================================================================
+bash ./_get-container-ip.sh

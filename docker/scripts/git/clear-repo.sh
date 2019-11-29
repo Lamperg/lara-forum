@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-cd ../../..
-git remote rm origin
 
+source ../_config.sh
+cd ${DOCKER_ROOT_DIR}
+
+git remote rm origin
 git init

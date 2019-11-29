@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
-cd ../../
-#docker-compose exec --user www-data app composer $@
+
+source ./_config.sh
+cd ${DOCKER_ROOT_DIR}
+
 docker-compose exec --user www app composer $@
