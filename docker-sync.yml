@@ -7,4 +7,4 @@ syncs:
   lara-forum-sync:
     src: './src'
     sync_userid: 1000
-    sync_excludes: [".idea", ".git", "node_modules"]
+    sync_excludes: [".idea", ".git"]

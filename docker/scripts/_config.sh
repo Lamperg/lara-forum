@@ -7,8 +7,8 @@ cd ../../
 DOCKER_ROOT_DIR=`pwd`
 DOCKER_SCRIPTS_DIR="${DOCKER_ROOT_DIR}/docker/scripts"
 
-COLOR_RED="\e[31m"
-COLOR_BLUE="\e[34m"
+COLOR_RED="\033[31m"
+COLOR_BLUE="\033[34m"
 COLOR_DEFAULT="\033[0m"
 #=============================================================================
 # OS checking functions
@@ -25,7 +25,7 @@ is_linux() {
 is_mac() {
     if uname -a | grep -i "darwin" > /dev/null;
     then
-        debug "OSX system detected"
+        debug 'OSX system detected'
         true
     else
         false

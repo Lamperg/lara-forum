@@ -10,6 +10,8 @@ services:
   # NGINX Server
   #=============================================================================
   webserver:
+    ports:
+      - "8000:80"
     volumes:
       - lara-forum-sync:/var/www/${COMPOSE_PROJECT_NAME}:nocopy
 
