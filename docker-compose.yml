@@ -5,29 +5,35 @@ services:
   #=============================================================================
   app:
     build:
-      context: .
-      dockerfile: .docker/app/Dockerfile
+      context: ./docker
+      dockerfile: app/Dockerfile
+      args:
+        - APP_PHP_VERSION=${PHP_VERSION}
+        - APP_NAME=${COMPOSE_PROJECT_NAME}
+        - APP_NODE_JS_VERSION=${NODE_JS_VERSION}
     networks:
-      - lara-forum-network
+      - app-network
     volumes:
-      - lara-forum-sync:/var/www:nocopy
-      - ./.docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./src:/var/www/${COMPOSE_PROJECT_NAME}
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
 
   # NGINX Server
   #=============================================================================
   webserver:
-    image: nginx:alpine
-    ports:
-      - "8000:80"
+    build:
+      context: ./docker
+      dockerfile: nginx/Dockerfile
+      args:
+        - APP_NAME=${COMPOSE_PROJECT_NAME}
     links:
       - app
     depends_on:
       - app
     networks:
-      - lara-forum-network
+      - app-network
     volumes:
-      - lara-forum-sync:/var/www:nocopy
-      - ./.docker/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./src:/var/www/${COMPOSE_PROJECT_NAME}
+      - ./docker/nginx/app.conf:/home/root/nginx/app.conf
 
   # DATABASE
   #=============================================================================
@@ -37,26 +43,24 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_USER: lara-forum
-      MYSQL_PASSWORD: secret
-      MYSQL_DATABASE: lara-forum
+      MYSQL_USER: ${DB_USER}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     volumes:
       - db-data:/var/lib/mysql
-      - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
     networks:
-      - lara-forum-network
+      - app-network
 
 # DOCKER NETWORKS
 #===============================================================================
 networks:
-  lara-forum-network:
+  app-network:
     driver: bridge
 
 # DOCKER VOLUMES
 #===============================================================================
 volumes:
-  lara-forum-sync:
-    external: true
   db-data:
     driver: local
