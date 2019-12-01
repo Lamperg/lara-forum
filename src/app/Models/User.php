@@ -112,6 +112,14 @@ class User extends Authenticatable
     }
 
     /**
+     * @return string
+     */
+    public function avatar()
+    {
+        return $this->avatar_path ?? 'avatars/default.jpg';
+    }
+
+    /**
      * @param Thread $thread
      *
      * @return string

@@ -13,8 +13,8 @@ class UserTest extends TestCase
     use RefreshDatabase;
 
     /**
-    * @test
-    */
+     * @test
+     */
     public function user_can_fetch_the_most_recent_reply()
     {
         /** @var User $user */
@@ -23,5 +23,18 @@ class UserTest extends TestCase
         $reply = create(Reply::class, ['user_id' => $user->id]);
 
         $this->assertEquals($reply->id, $user->lastReply->id);
+    }
+
+    /**
+     * @test
+     */
+    public function user_can_determine_their_avatar_path()
+    {
+        /** @var User $user */
+        $user = create(User::class);
+        $this->assertEquals('avatars/default.jpg', $user->avatar());
+
+        $user->avatar_path = 'avatars/me.jpg';
+        $this->assertEquals('avatars/me.jpg', $user->avatar_path);
     }
 }

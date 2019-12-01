@@ -33,7 +33,10 @@
                         <br/>
                     @endcan
 
-                    <img src="/{{ $profileUser->avatar_path }}" alt="{{ $profileUser->name }}" class="img-thumbnail">
+                    <img class="img-thumbnail"
+                         alt="{{ $profileUser->name }}"
+                         src="{{ asset("/storage/{$profileUser->avatar_path}") }}"
+                    >
                 </div>
 
                 @forelse($activities as $date => $records)

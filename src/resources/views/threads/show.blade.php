@@ -15,11 +15,16 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="level">
-                            <span class="flex">
+                                <img class="img-thumbnail mr-2"
+                                     alt="{{ $thread->owner->name }}"
+                                     src="{{ $thread->owner->avatar() }}"
+                                     width="50"
+                                >
+                                <span class="flex">
                                 <a href="{{ route('profiles.show', $thread->owner) }}">
                                     {{ $thread->owner->name }}
                                 </a> posted {{ $thread->title }}
-                            </span>
+                                </span>
 
                                 @can('update', $thread)
                                     <form action="{{ $thread->path() }}" method="post">
