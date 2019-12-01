@@ -9,35 +9,9 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="page-header">
-                    <h1>{{ $profileUser->name }}</h1>
-                    <small>Since {{ $profileUser->created_at->diffForHumans() }}</small>
+                <small>Since {{ $profileUser->created_at->diffForHumans() }}</small>
 
-                    @can('update', $profileUser)
-                        <form method="post"
-                              enctype="multipart/form-data"
-                              action="{{ route('api.avatar_store', $profileUser) }}"
-                        >
-                            @csrf
-
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <label class="custom-file-label" for="avatar">Choose avatar</label>
-                                    <input type="file" class="custom-file-input" name="avatar" id="avatar">
-                                </div>
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="submit">Save avatar</button>
-                                </div>
-                            </div>
-                        </form>
-                        <br/>
-                    @endcan
-
-                    <img class="img-thumbnail"
-                         alt="{{ $profileUser->name }}"
-                         src="{{ asset("/storage/{$profileUser->avatar_path}") }}"
-                    >
-                </div>
+                <avatar-form :user="{{ $profileUser }}"></avatar-form>
 
                 @forelse($activities as $date => $records)
                     <h3 class="page-header">{{ $date }}</h3>

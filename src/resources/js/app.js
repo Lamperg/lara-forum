@@ -34,6 +34,10 @@ window.Vue.prototype.authorize = function(handler) {
 // files(key).default));
 
 Vue.component(
+    'avatar-form',
+    require('./components/AvatarForm.vue').default
+);
+Vue.component(
     'paginator-base',
     require('./components/PaginatorBase').default
 );

@@ -32,9 +32,9 @@ class UserTest extends TestCase
     {
         /** @var User $user */
         $user = create(User::class);
-        $this->assertEquals('avatars/default.jpg', $user->avatar());
+        $this->assertEquals(asset(User::AVATAR_DEFAULT), $user->avatar_path);
 
         $user->avatar_path = 'avatars/me.jpg';
-        $this->assertEquals('avatars/me.jpg', $user->avatar_path);
+        $this->assertEquals(asset(User::AVATAR_STORAGE . 'avatars/me.jpg'), $user->avatar_path);
     }
 }

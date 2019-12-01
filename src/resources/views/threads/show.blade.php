@@ -17,7 +17,7 @@
                             <div class="level">
                                 <img class="img-thumbnail mr-2"
                                      alt="{{ $thread->owner->name }}"
-                                     src="{{ $thread->owner->avatar() }}"
+                                     src="{{ $thread->owner->avatar_path }}"
                                      width="50"
                                 >
                                 <span class="flex">

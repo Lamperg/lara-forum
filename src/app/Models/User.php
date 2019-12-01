@@ -34,6 +34,9 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    const AVATAR_STORAGE = '/storage/';
+    const AVATAR_DEFAULT = 'img/avatars/default.jpg';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -112,11 +115,17 @@ class User extends Authenticatable
     }
 
     /**
+     * @param $avatar
+     *
      * @return string
      */
-    public function avatar()
+    public function getAvatarPathAttribute($avatar)
     {
-        return $this->avatar_path ?? 'avatars/default.jpg';
+        if (!$avatar) {
+            return asset(self::AVATAR_DEFAULT);
+        }
+
+        return asset(self::AVATAR_STORAGE . $avatar);
     }
 
     /**

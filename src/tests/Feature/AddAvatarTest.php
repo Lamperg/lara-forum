@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
@@ -53,6 +54,6 @@ class AddAvatarTest extends TestCase
         ]);
 
         Storage::disk('public')->assertExists($avatarPath);
-        $this->assertEquals($avatarPath, $user->avatar_path);
+        $this->assertEquals(asset(User::AVATAR_STORAGE . $avatarPath), $user->avatar_path);
     }
 }
