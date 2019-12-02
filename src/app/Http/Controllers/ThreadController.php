@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Response;
 use App\Filters\ThreadFilters;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * Class ThreadController
@@ -29,7 +30,7 @@ class ThreadController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Channel       $channel
+     * @param Channel $channel
      * @param ThreadFilters $filters
      *
      * @return mixed
@@ -46,7 +47,12 @@ class ThreadController extends Controller
             return $threads;
         }
 
-        return view('threads.index', compact('threads'));
+        $trending = Redis::zrevrange(Thread::REDIS_TRENDING, 0, -1);
+        $trending = array_map(function ($thread) {
+            return json_decode($thread);
+        }, $trending);
+
+        return view('threads.index', compact('threads', 'trending'));
     }
 
     /**
@@ -95,9 +101,15 @@ class ThreadController extends Controller
      */
     public function show($channel, Thread $thread)
     {
-        if ($user = $this->getAuthUser()) {
+
+        if ($user = auth()->user()) {
             $user->read($thread);
         }
+
+        Redis::zincrby(Thread::REDIS_TRENDING, 1, json_encode([
+            'title' => $thread->title,
+            'path' => $thread->path()
+        ]));
 
         return view('threads.show', compact('thread'));
     }
@@ -106,7 +118,7 @@ class ThreadController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Channel $channel
-     * @param Thread  $thread
+     * @param Thread $thread
      *
      * @return mixed
      * @throws \Exception
