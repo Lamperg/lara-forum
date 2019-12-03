@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Events\ThreadHasNewReply;
 use App\Notifications\ThreadWasUpdated;
 use App\Traits\RecordsActivity;
+use App\Traits\RecordsVisits;
 use Carbon\Carbon;
 use App\Filters\Filters;
 use Illuminate\Database\Eloquent\Model;
@@ -12,22 +13,23 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * Class Thread
  *
- * @property integer                         $id
- * @property string                          $title
- * @property string                          $body
- * @property Carbon|string                   $created_at
- * @property Carbon|string                   $updated_at
- * @property string                          $user_id
- * @property Collection|Reply[]              $replies
- * @property User                            $owner
- * @property Channel                         $channel
+ * @property integer $id
+ * @property string $title
+ * @property string $body
+ * @property Carbon|string $created_at
+ * @property Carbon|string $updated_at
+ * @property string $user_id
+ * @property Collection|Reply[] $replies
+ * @property User $owner
+ * @property Channel $channel
  * @property Collection|ThreadSubscription[] $subscriptions
- * @property integer                         $replies_count
- * @property bool                            $isSubscribedTo
+ * @property integer $replies_count
+ * @property bool $isSubscribedTo
  *
  *
  * @method static Builder|Thread filter(Filters $filters)
@@ -37,7 +39,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Thread extends Model
 {
-    use RecordsActivity;
+    use RecordsActivity, RecordsVisits;
 
     const STATE_CREATED = 'created_thread';
 

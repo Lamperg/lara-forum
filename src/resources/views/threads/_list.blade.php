@@ -1,3 +1,7 @@
+@php
+    /** @var \App\Models\Thread $thread */
+@endphp
+
 @forelse($threads as $thread)
     <div class="card mt-2">
         <div class="card-header">
@@ -27,6 +31,10 @@
 
         <div class="card-body">
             <div class="body">{{ $thread->body }}</div>
+        </div>
+
+        <div class="card-footer">
+            {{ $thread->visits() }} Visits
         </div>
     </div>
 @empty

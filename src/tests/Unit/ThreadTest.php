@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Notifications\ThreadWasUpdated;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Redis;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Thread;
@@ -147,5 +148,20 @@ class ThreadTest extends TestCase
         $user->read($this->thread);
 
         $this->assertFalse($this->thread->hasUpdatesFor($user));
+    }
+
+    /**
+     * @test
+     */
+    public function it_records_each_visit()
+    {
+        $this->thread->resetVisits();
+        $this->assertSame(0, $this->thread->visits());
+
+        $this->thread->recordVisit();
+        $this->assertEquals(1, $this->thread->visits());
+
+        $this->thread->recordVisit();
+        $this->assertEquals(2, $this->thread->visits());
     }
 }
