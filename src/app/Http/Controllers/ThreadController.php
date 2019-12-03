@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Inspections\Spam;
-use App\Models\Thread;
-use App\Models\Channel;
-use App\Rules\SpamFree;
-use Carbon\Carbon;
-use Illuminate\Http\Response;
 use App\Filters\ThreadFilters;
+use App\Models\Channel;
+use App\Models\Thread;
+use App\Rules\SpamFree;
+use App\Services\Trending;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Http\Response;
 
 /**
  * Class ThreadController
@@ -32,10 +30,10 @@ class ThreadController extends Controller
      *
      * @param Channel $channel
      * @param ThreadFilters $filters
-     *
+     * @param Trending $trending
      * @return mixed
      */
-    public function index(Channel $channel, ThreadFilters $filters)
+    public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
     {
         /** @var Collection $threads */
         $threads = Thread::latest()->filter($filters)->get();
@@ -47,12 +45,10 @@ class ThreadController extends Controller
             return $threads;
         }
 
-        $trending = array_map(
-            'json_decode',
-            Redis::zrevrange(Thread::REDIS_TRENDING, 0, 4)
-        );
-
-        return view('threads.index', compact('threads', 'trending'));
+        return view('threads.index', [
+            'threads' => $threads,
+            'trending' => $trending->get()
+        ]);
     }
 
     /**
@@ -96,20 +92,17 @@ class ThreadController extends Controller
      * @param        $channel
      * @param Thread $thread
      *
+     * @param Trending $trending
      * @return Response
-     * @throws \Exception
      */
-    public function show($channel, Thread $thread)
+    public function show($channel, Thread $thread, Trending $trending)
     {
 
         if ($user = auth()->user()) {
             $user->read($thread);
         }
 
-        Redis::zincrby(Thread::REDIS_TRENDING, 1, json_encode([
-            'title' => $thread->title,
-            'path' => $thread->path()
-        ]));
+        $trending->push($thread);
 
         return view('threads.show', compact('thread'));
     }

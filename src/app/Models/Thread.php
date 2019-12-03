@@ -40,7 +40,6 @@ class Thread extends Model
     use RecordsActivity;
 
     const STATE_CREATED = 'created_thread';
-    const REDIS_TRENDING = 'trending_threads';
 
     /**
      * {@inheritDoc}
