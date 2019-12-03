@@ -47,10 +47,10 @@ class ThreadController extends Controller
             return $threads;
         }
 
-        $trending = Redis::zrevrange(Thread::REDIS_TRENDING, 0, -1);
-        $trending = array_map(function ($thread) {
-            return json_decode($thread);
-        }, $trending);
+        $trending = array_map(
+            'json_decode',
+            Redis::zrevrange(Thread::REDIS_TRENDING, 0, 4)
+        );
 
         return view('threads.index', compact('threads', 'trending'));
     }
