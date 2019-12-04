@@ -3,17 +3,16 @@
 namespace App\Models;
 
 use App\Events\ThreadHasNewReply;
-use App\Notifications\ThreadWasUpdated;
+use App\Filters\Filters;
+use App\Services\Visits;
 use App\Traits\RecordsActivity;
 use App\Traits\RecordsVisits;
 use Carbon\Carbon;
-use App\Filters\Filters;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Thread
@@ -39,7 +38,7 @@ use Illuminate\Support\Facades\Redis;
  */
 class Thread extends Model
 {
-    use RecordsActivity, RecordsVisits;
+    use RecordsActivity;
 
     const STATE_CREATED = 'created_thread';
 
@@ -182,5 +181,13 @@ class Thread extends Model
     public function hasUpdatesFor(User $user)
     {
         return $this->updated_at > cache($user->visitedThreadCacheKey($this));
+    }
+
+    /**
+     * @return Visits
+     */
+    public function visits(): Visits
+    {
+        return new Visits($this);
     }
 }

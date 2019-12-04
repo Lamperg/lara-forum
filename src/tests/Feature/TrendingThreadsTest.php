@@ -29,6 +29,8 @@ class TrendingThreadsTest extends TestCase
      */
     public function thread_score_is_increment_when_it_is_read()
     {
+        $this->withoutExceptionHandling();
+
         $this->assertCount(0, $this->trending->get());
 
         /** @var Thread $thread */
