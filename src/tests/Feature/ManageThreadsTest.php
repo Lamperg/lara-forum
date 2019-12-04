@@ -26,6 +26,16 @@ class ManageThreadsTest extends TestCase
     /**
      * @test
      */
+    public function authenticated_users_must_confirm_email_before_creating_threads()
+    {
+        $this->publishThread()
+            ->assertRedirect('/threads')
+            ->assertSessionHas('flash', __('messages.user.confirm_email'));
+    }
+
+    /**
+     * @test
+     */
     public function authenticated_user_can_create_new_threads()
     {
         $this->signIn();

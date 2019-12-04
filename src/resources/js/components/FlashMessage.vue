@@ -9,43 +9,45 @@
 </template>
 
 <script>
-  import eventBus from '../eventBus';
+    import eventBus from '../eventBus';
 
-  export default {
-    props: ['message'],
+    export default {
+        props: ['message'],
 
-    data() {
-      return {
-        body: '',
-        show: false,
-        level: 'success'
-      };
-    },
+        data() {
+            return {
+                body: this.message,
+                show: false,
+                level: 'success',
+            };
+        },
 
-    created() {
-      if (this.message) {
-        this.flash(this.message);
-      }
+        created() {
+            if (this.message) {
+                this.flash();
+            }
 
-      eventBus.$on('flash-show', data => this.flash(data));
-    },
+            eventBus.$on('flash-show', data => this.flash(data));
+        },
 
-    methods: {
-      flash(data) {
-        this.show = true;
-        this.level = data.level;
-        this.body = data.message;
+        methods: {
+            flash(data) {
+                if (data) {
+                    this.level = data.level;
+                    this.body = data.message;
+                }
+                this.show = true;
 
-        this.hide();
-      },
+                this.hide();
+            },
 
-      hide() {
-        setTimeout(() => {
-          this.show = false;
-        }, 3000);
-      }
-    }
-  };
+            hide() {
+                setTimeout(() => {
+                    this.show = false;
+                }, 3000);
+            },
+        },
+    };
 </script>
 
 <style type="text/css">

@@ -21,7 +21,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::prefix('threads/')->name('threads.')->group(function () {
     Route::get('/', 'ThreadController@index')->name('index');
-    Route::post('/', 'ThreadController@store')->name('store');
+    Route::post('/', 'ThreadController@store')->name('store')->middleware('must-be-confirmed');
     Route::get('/create', 'ThreadController@create')->name('create');
     Route::get('{channel}', 'ThreadController@index')->name('channel_index');
     Route::get('{channel}/{thread}', 'ThreadController@show')->name('show');

@@ -3093,7 +3093,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ['message'],
   data: function data() {
     return {
-      body: '',
+      body: this.message,
       show: false,
       level: 'success'
     };
@@ -3102,7 +3102,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     if (this.message) {
-      this.flash(this.message);
+      this.flash();
     }
 
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('flash-show', function (data) {
@@ -3111,9 +3111,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     flash: function flash(data) {
+      if (data) {
+        this.level = data.level;
+        this.body = data.message;
+      }
+
       this.show = true;
-      this.level = data.level;
-      this.body = data.message;
       this.hide();
     },
     hide: function hide() {
