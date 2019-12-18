@@ -20,6 +20,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string $email
  * @property string $password
  * @property boolean $confirmed
+ * @property string $confirmation_token
  * @property string $avatar_path
  * @property Reply $lastReply
  * @property Carbon|string $created_at
@@ -49,6 +50,7 @@ class User extends Authenticatable
         'email',
         'password',
         'avatar_path',
+        'confirmation_token'
     ];
 
     /**
@@ -68,6 +70,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
+        'confirmed' => 'boolean',
         'email_verified_at' => 'datetime',
     ];
 
