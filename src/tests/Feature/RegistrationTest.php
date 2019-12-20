@@ -32,15 +32,23 @@ class RegistrationTest extends TestCase
      */
     public function user_can_fully_confirmed_their_email_address()
     {
-        /** @var User $user */
-        $user = make(User::class, [
+        $this->post('/register', [
             'name' => 'John',
             'email' => 'john@example.com',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
         ]);
 
-        $user = $this->post('/register', $user->toArray());
-        
+        /** @var User $user */
+        $user = User::first();
+
         $this->assertFalse($user->confirmed);
         $this->assertNotNull($user->confirmation_token);
+
+        $this->get(route('api.register_confirm', [
+            'token' => $user->confirmation_token,
+        ]));
+
+        $this->assertTrue($user->fresh()->confirmed);
     }
 }

@@ -15,18 +15,18 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 /**
  * Class User
  *
- * @property integer $id
- * @property string $name
- * @property string $email
- * @property string $password
- * @property boolean $confirmed
- * @property string $confirmation_token
- * @property string $avatar_path
- * @property Reply $lastReply
- * @property Carbon|string $created_at
- * @property Carbon|string $updated_at
- * @property Collection|Thread[] $threads
- * @property Collection|Activity[] $activity
+ * @property integer                           $id
+ * @property string                            $name
+ * @property string                            $email
+ * @property string                            $password
+ * @property boolean                           $confirmed
+ * @property string                            $confirmation_token
+ * @property string                            $avatar_path
+ * @property Reply                             $lastReply
+ * @property Carbon|string                     $created_at
+ * @property Carbon|string                     $updated_at
+ * @property Collection|Thread[]               $threads
+ * @property Collection|Activity[]             $activity
  * @property Collection|DatabaseNotification[] $notifications
  * @property Collection|DatabaseNotification[] $unreadNotifications
  *
@@ -50,7 +50,7 @@ class User extends Authenticatable
         'email',
         'password',
         'avatar_path',
-        'confirmation_token'
+        'confirmation_token',
     ];
 
     /**
@@ -117,6 +117,12 @@ class User extends Authenticatable
             $this->visitedThreadCacheKey($thread),
             Carbon::now()
         );
+    }
+
+    public function confirm()
+    {
+        $this->confirmed = true;
+        $this->save();
     }
 
     /**
