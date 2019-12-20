@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Activity;
 use App\Models\Reply;
+use App\Models\User;
 use Tests\TestCase;
 use App\Models\Thread;
 use App\Models\Channel;
@@ -26,9 +27,16 @@ class ManageThreadsTest extends TestCase
     /**
      * @test
      */
-    public function authenticated_users_must_confirm_email_before_creating_threads()
+    public function new_users_must_confirm_email_before_creating_threads()
     {
-        $this->publishThread()
+        /** @var User $user */
+        $user = factory(User::class)->state('unconfirmed')->create();
+        $this->signIn($user);
+
+        /** @var Thread $thread */
+        $thread = make(Thread::class);
+
+        $this->post(route('threads.store'), $thread->toArray())
             ->assertRedirect('/threads')
             ->assertSessionHas('flash', __('messages.user.confirm_email'));
     }
@@ -36,7 +44,7 @@ class ManageThreadsTest extends TestCase
     /**
      * @test
      */
-    public function authenticated_user_can_create_new_threads()
+    public function user_can_create_new_threads()
     {
         $this->signIn();
 

@@ -10,5 +10,6 @@ return [
     'thread.store' => 'Your thread has been published!',
 
     // Users
-    'user.confirm_email' => 'You must first confirm you email address'
+    'user.confirm_email' => 'You must first confirm you email address',
+    'user.unknown_token' => 'Unknown token'
 ];
