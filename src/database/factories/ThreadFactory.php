@@ -10,10 +10,13 @@ use Illuminate\Database\Eloquent\Factory;
  * @var Factory $factory
  */
 $factory->define(Thread::class, function (Faker $faker) {
+    $title = $faker->sentence;
+
     return [
-        'title' => $faker->sentence(3),
+        'title' => $title,
         'body' => $faker->paragraph,
         'user_id' => factory(User::class),
         'channel_id' => factory(Channel::class),
+        'slug' => \Str::slug($title)
     ];
 });

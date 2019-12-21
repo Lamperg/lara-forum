@@ -6,19 +6,20 @@ use App\Events\ThreadHasNewReply;
 use App\Filters\Filters;
 use App\Services\Visits;
 use App\Traits\RecordsActivity;
-use App\Traits\RecordsVisits;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 /**
  * Class Thread
  *
  * @property integer $id
  * @property string $title
+ * @property string $slug
  * @property string $body
  * @property Carbon|string $created_at
  * @property Carbon|string $updated_at
@@ -72,6 +73,14 @@ class Thread extends Model
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    /**
      * @return HasMany
      */
     public function replies()
@@ -110,7 +119,7 @@ class Thread extends Model
      */
     public function path()
     {
-        return "/threads/{$this->channel->slug}/{$this->id}";
+        return "/threads/{$this->channel->slug}/{$this->slug}";
     }
 
     /**
@@ -189,5 +198,34 @@ class Thread extends Model
     public function visits(): Visits
     {
         return new Visits($this);
+    }
+
+    /**
+     * @param $value
+     */
+    public function setSlugAttribute($value)
+    {
+        $slug = Str::slug($value);
+
+        if (static::where('slug', $slug)->exists()) {
+            $slug = $this->incrementSlug($slug);
+        }
+
+        $this->attributes['slug'] = $slug;
+    }
+
+    public function incrementSlug($slug)
+    {
+        $max = static::where('title', $this->title)
+            ->latest('id')
+            ->value('slug');
+
+        if (is_numeric($max[-1])) {
+            preg_replace_callback('/(\d+)$/', function ($matches) {
+                return $matches[1]++;
+            }, $max);
+        }
+
+        return "$slug-2";
     }
 }

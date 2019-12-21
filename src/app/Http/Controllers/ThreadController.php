@@ -8,7 +8,10 @@ use App\Models\Thread;
 use App\Rules\SpamFree;
 use App\Services\Trending;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
+use Illuminate\Support\Str;
 
 /**
  * Class ThreadController
@@ -64,7 +67,7 @@ class ThreadController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return void
+     * @return RedirectResponse|Redirector
      * @throws \Exception
      */
     public function store()
@@ -77,6 +80,7 @@ class ThreadController extends Controller
 
         $thread = Thread::create([
             'body' => request('body'),
+            'slug' => request('title'),
             'title' => request('title'),
             'user_id' => $this->getAuthUser()->id,
             'channel_id' => request('channel_id'),
