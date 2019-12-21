@@ -47,5 +47,6 @@ Route::delete('profiles/{user}/notifications/{notification}', 'UserNotifications
 Route::prefix('/api/')->name('api.')->namespace('Api')->group(function () {
     Route::get('users', 'UserController@index')->name('users');
     Route::post('users/{user}/avatar', 'UserAvatarController@store')->name('avatar_store');
-    Route::get('register/confirm', 'RegisterConfirmationController@index')->name('register_confirm');
 });
+
+Route::get('register/confirm', 'Auth\RegisterConfirmationController@index')->name('register_confirm');

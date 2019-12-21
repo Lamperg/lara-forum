@@ -11,5 +11,6 @@ return [
 
     // Users
     'user.confirm_email' => 'You must first confirm you email address',
+    'user.email_confirmed' => 'Your account is now confirmed! You may post to the forum.',
     'user.unknown_token' => 'Unknown token'
 ];

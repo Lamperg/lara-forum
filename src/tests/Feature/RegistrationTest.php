@@ -37,7 +37,7 @@ class RegistrationTest extends TestCase
         $this->assertFalse($user->confirmed);
         $this->assertNotNull($user->confirmation_token);
 
-        $this->get(route('api.register_confirm', [
+        $this->get(route('register_confirm', [
             'token' => $user->confirmation_token,
         ]));
 
