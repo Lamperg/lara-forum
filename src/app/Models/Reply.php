@@ -11,12 +11,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class Reply
  *
- * @property integer       $id
- * @property string        $body
+ * @property integer $id
+ * @property string $body
  * @property Carbon|string $created_at
  * @property Carbon|string $updated_at
- * @property User          $owner
- * @property Thread        $thread
+ * @property User $owner
+ * @property Thread $thread
  *
  * @package App\Models
  * @mixin \Eloquent
@@ -89,6 +89,14 @@ class Reply extends Model
     public function wasJustPublished()
     {
         return $this->created_at->gt(Carbon::now()->subMinute());
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBest()
+    {
+        return $this->thread->best_reply_id == $this->id;
     }
 
     /**

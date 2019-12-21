@@ -24,6 +24,7 @@ use Illuminate\Support\Str;
  * @property Carbon|string $created_at
  * @property Carbon|string $updated_at
  * @property string $user_id
+ * @property string $best_reply_id
  * @property Collection|Reply[] $replies
  * @property User $owner
  * @property Channel $channel
@@ -134,6 +135,15 @@ class Thread extends Model
         event(new ThreadHasNewReply($this, $reply));
 
         return $reply;
+    }
+
+    /**
+     * @param Reply $reply
+     */
+    public function markBestReply(Reply $reply)
+    {
+        $this->best_reply_id = $reply->id;
+        $this->save();
     }
 
     /**

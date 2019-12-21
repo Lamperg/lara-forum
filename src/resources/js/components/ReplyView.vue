@@ -1,6 +1,6 @@
 <template>
     <div :id="`reply-${id}`" class="card mt-2">
-        <div class="card-header">
+        <div class="card-header" :class="isBest ? 'bg-success' : ''">
             <div class="level">
                 <span class="flex">
                     <a :href="`'/profiles/${data.owner.name}`"
@@ -25,66 +25,75 @@
             <div v-else v-html="body"></div>
         </div>
 
-        <div class="card-footer level" v-if="canUpdate">
-            <button class="btn btn-secondary btn-sm mr-2" @click="editing=true">Edit</button>
-            <button class="btn btn-danger btn-sm" @click="destroy">Delete</button>
+        <div class="card-footer level">
+            <div v-if="canUpdate">
+                <button class="btn btn-secondary btn-sm mr-2" @click="editing=true">Edit</button>
+                <button class="btn btn-danger btn-sm mr-2" @click="destroy">Delete</button>
+            </div>
+
+            <button class="btn btn-info btn-sm ml-auto" @click="markBestReply" v-show="!isBest">Best Reply?</button>
         </div>
     </div>
 </template>
 <script>
-  import moment from 'moment';
-  import FavoriteBase from './FavoriteBase';
+    import moment from 'moment';
+    import FavoriteBase from './FavoriteBase';
 
-  export default {
-    props: ['data'],
-    components: {FavoriteBase},
+    export default {
+        props: ['data'],
+        components: {FavoriteBase},
 
-    data() {
-      return {
-        editing: false,
-        id: this.data.id,
-        body: this.data.body
-      };
-    },
+        data() {
+            return {
+                isBest: false,
+                editing: false,
+                id: this.data.id,
+                body: this.data.body,
+            };
+        },
 
-    computed: {
+        computed: {
 
-      ago() {
-        return moment(this.data.created_at).fromNow();
-      },
+            ago() {
+                return moment(this.data.created_at).fromNow();
+            },
 
-      signedIn() {
-        return !!window.App.signedIn;
-      },
+            signedIn() {
+                return !!window.App.signedIn;
+            },
 
-      canUpdate() {
-        return this.authorize(user => this.data.user_id === user.id);
-      }
-    },
+            canUpdate() {
+                return this.authorize(user => this.data.user_id === user.id);
+            },
+        },
 
-    methods: {
-      /**
-       * Updates the current reply
-       */
-      update() {
-        axios.patch(`/replies/${this.data.id}`, {
-          body: this.body
-        }).then(() => {
-          this.editing = false;
-          flash('The reply has been updated');
-        }).catch(error => {
-          flash(error.response.data, 'danger');
-        });
-      },
+        methods: {
+            /**
+             * Updates the current reply
+             */
+            update() {
+                axios.patch(`/replies/${this.data.id}`, {
+                    body: this.body,
+                }).then(() => {
+                    this.editing = false;
+                    flash('The reply has been updated');
+                }).catch(error => {
+                    flash(error.response.data, 'danger');
+                });
+            },
 
-      /**
-       * Removed the current reply
-       */
-      destroy() {
-        axios.delete(`/replies/${this.data.id}`).then(() => {
-          this.$emit('deleted', this.data.id);
-        });
-      }
-    }
-  };
+            /**
+             * Removed the current reply
+             */
+            destroy() {
+                axios.delete(`/replies/${this.data.id}`).then(() => {
+                    this.$emit('deleted', this.data.id);
+                });
+            },
+
+            markBestReply() {
+                this.isBest = true;
+            },
+        },
+    };
 </script>
