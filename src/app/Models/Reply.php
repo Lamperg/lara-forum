@@ -57,7 +57,7 @@ class Reply extends Model
     /**
      * {@inheritDoc}
      */
-    protected $appends = ['favoritesCount', 'isFavorited'];
+    protected $appends = ['favoritesCount', 'isFavorited', 'isBest'];
 
     /**
      * @return BelongsTo
@@ -109,5 +109,13 @@ class Reply extends Model
             '<a href="/profiles/$1">$0</a>',
             $body
         );
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsBestAttribute()
+    {
+        return $this->isBest();
     }
 }

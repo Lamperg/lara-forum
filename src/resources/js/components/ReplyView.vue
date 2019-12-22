@@ -38,6 +38,7 @@
 <script>
     import moment from 'moment';
     import FavoriteBase from './FavoriteBase';
+    import eventBus from '../eventBus';
 
     export default {
         props: ['data'],
@@ -45,16 +46,21 @@
 
         data() {
             return {
-                isBest: false,
                 editing: false,
                 id: this.data.id,
-                body: this.data.body,
                 reply: this.data,
+                body: this.data.body,
+                isBest: this.data.isBest,
             };
         },
 
-        computed: {
+        created() {
+            eventBus.$on('best-reply-selected', id => {
+                this.isBest = (id === this.id);
+            });
+        },
 
+        computed: {
             ago() {
                 return moment(this.data.created_at).fromNow();
             },
@@ -85,7 +91,9 @@
             },
 
             markBestReply() {
-                this.isBest = true;
+                axios.post(`/replies/${this.reply.id}/best`).then(() => {
+                    eventBus.$emit('best-reply-selected', this.reply.id);
+                });
             },
         },
     };
