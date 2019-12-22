@@ -24,3 +24,9 @@ $factory->state(User::class, 'unconfirmed', function () {
         'confirmed' => false,
     ];
 });
+
+$factory->state(User::class, 'administrator', function () {
+    return [
+        'email' => env('FIRST_USER_EMAIL')
+    ];
+});

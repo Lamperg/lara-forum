@@ -17,6 +17,7 @@ $factory->define(Thread::class, function (Faker $faker) {
         'body' => $faker->paragraph,
         'user_id' => factory(User::class),
         'channel_id' => factory(Channel::class),
-        'slug' => \Str::slug($title)
+        'slug' => \Str::slug($title),
+        'locked' => false,
     ];
 });

@@ -21,6 +21,7 @@ use Illuminate\Support\Str;
  * @property string $title
  * @property string $slug
  * @property string $body
+ * @property boolean $locked
  * @property Carbon|string $created_at
  * @property Carbon|string $updated_at
  * @property string $user_id
@@ -224,6 +225,10 @@ class Thread extends Model
         $this->attributes['slug'] = $slug;
     }
 
+    /**
+     * @param $slug
+     * @return string
+     */
     public function incrementSlug($slug)
     {
         $max = static::where('title', $this->title)
@@ -237,5 +242,10 @@ class Thread extends Model
         }
 
         return "$slug-2";
+    }
+
+    public function lock()
+    {
+        $this->update(['locked' => true]);
     }
 }
