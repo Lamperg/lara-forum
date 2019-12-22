@@ -4,6 +4,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 import eventBus from './eventBus';
+import authorizations from './authorizations';
 
 require('./bootstrap');
 
@@ -11,14 +12,21 @@ window.Vue = require('vue');
 
 /**
  * Authorization mixin for Vue components
- * @param handler
  * @returns {boolean}
+ * @param params
  */
-window.Vue.prototype.authorize = function(handler) {
-    let user = window.App.user;
+window.Vue.prototype.authorize = function(...params) {
+    if (!window.App.signedIn) {
+        return false;
+    }
+    if (typeof params[0] === 'string') {
+        return authorizations[params[0]](params[1]);
+    }
 
-    return user ? handler(user) : false;
+    return params[0](window.App.user);
 };
+
+window.Vue.prototype.signedIn = !!window.App.signedIn;
 
 /**
  * The following block of code may be used to automatically register your
@@ -35,23 +43,23 @@ window.Vue.prototype.authorize = function(handler) {
 
 Vue.component(
     'avatar-form',
-    require('./components/AvatarForm.vue').default
+    require('./components/AvatarForm.vue').default,
 );
 Vue.component(
     'paginator-base',
-    require('./components/PaginatorBase').default
+    require('./components/PaginatorBase').default,
 );
 Vue.component(
     'flash-message',
-    require('./components/FlashMessage.vue').default
+    require('./components/FlashMessage.vue').default,
 );
 Vue.component(
     'thread-view',
-    require('./components/pages/ThreadView.vue').default
+    require('./components/pages/ThreadView.vue').default,
 );
 Vue.component(
     'user-notifications',
-    require('./components/UserNotifications.vue').default
+    require('./components/UserNotifications.vue').default,
 );
 
 /**
@@ -61,7 +69,7 @@ Vue.component(
  */
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
 });
 
 /**
