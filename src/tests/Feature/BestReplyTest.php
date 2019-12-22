@@ -18,7 +18,6 @@ class BestReplyTest extends TestCase
      */
     public function thread_create_can_mark_any_reply_as_the_best_reply()
     {
-        /** @var User $user */
         $user = $this->signIn();
         /** @var Thread $thread */
         $thread = create(Thread::class, ['user_id' => $user->id]);
@@ -39,7 +38,6 @@ class BestReplyTest extends TestCase
      */
     public function only_the_thread_creator_may_mark_the_reply_as_best()
     {
-        /** @var User $user */
         $user = $this->signIn();
         /** @var Thread $thread */
         $thread = create(Thread::class, ['user_id' => $user->id]);
@@ -53,5 +51,20 @@ class BestReplyTest extends TestCase
         $this->postJson(route('replies.best_store', [$bestReply]))->assertStatus(403);
 
         $this->assertFalse($bestReply->fresh()->isBest());
+    }
+
+    /**
+     * @test
+     */
+    public function if_best_reply_is_deleted_than_the_thread_is_updated_to_reflect_that()
+    {
+        $user = $this->signIn();
+        /** @var Reply $reply */
+        $reply = create(Reply::class, ['user_id' => $user->id]);
+
+        $reply->thread->markBestReply($reply);
+        $this->deleteJson(route('replies.destroy', $reply));
+
+        $this->assertNull($reply->thread->fresh()->best_reply_id);
     }
 }
