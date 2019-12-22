@@ -26,12 +26,15 @@
         </div>
 
         <div class="card-footer level">
-            <div v-if="authorize('updateReply', reply)">
+            <div v-if="authorize('owns', reply)">
                 <button class="btn btn-secondary btn-sm mr-2" @click="editing=true">Edit</button>
                 <button class="btn btn-danger btn-sm mr-2" @click="destroy">Delete</button>
             </div>
 
-            <button class="btn btn-info btn-sm ml-auto" @click="markBestReply" v-show="!isBest">Best Reply?</button>
+            <button class="btn btn-info btn-sm ml-auto"
+                    @click="markBestReply"
+                    v-if="authorize('owns', reply.thread) && isBest===false"
+            >Best Reply?</button>
         </div>
     </div>
 </template>
