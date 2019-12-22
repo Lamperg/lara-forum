@@ -243,9 +243,4 @@ class Thread extends Model
 
         return "$slug-2";
     }
-
-    public function lock()
-    {
-        $this->update(['locked' => true]);
-    }
 }

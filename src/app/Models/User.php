@@ -81,6 +81,11 @@ class User extends Authenticatable
     /**
      * {@inheritDoc}
      */
+    protected $appends = ['isAdmin'];
+
+    /**
+     * {@inheritDoc}
+     */
     public function getRouteKeyName()
     {
         return 'name';
@@ -156,5 +161,13 @@ class User extends Authenticatable
     public function visitedThreadCacheKey(Thread $thread)
     {
         return sprintf("users.%s.visits.%s", $this->id, $thread->id);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsAdminAttribute()
+    {
+        return $this->isAdmin();
     }
 }

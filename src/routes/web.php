@@ -22,7 +22,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::prefix('threads/')->name('threads.')->group(function () {
     Route::get('/', 'ThreadController@index')->name('index');
     Route::post('/', 'ThreadController@store')->name('store')->middleware('must-be-confirmed');
-    Route::post('{thread}/lock', 'LockedThreadsController@store')->name('lock');
+    Route::post('{thread}/lock', 'LockedThreadsController@store')->name('lock_store');
+    Route::delete('{thread}/lock', 'LockedThreadsController@destroy')->name('lock_destroy');
     Route::get('/create', 'ThreadController@create')->name('create');
     Route::get('{channel}', 'ThreadController@index')->name('channel_index');
     Route::get('{channel}/{thread}', 'ThreadController@show')->name('show');

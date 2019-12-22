@@ -3,17 +3,24 @@
 </template>
 
 <script>
-  import RepliesList from '../RepliesList.vue';
-  import SubscribeBtn from '../SubscribeBtn';
+    import RepliesList from '../RepliesList.vue';
+    import SubscribeBtn from '../SubscribeBtn';
 
-  export default {
-    props: ['initialRepliesCount'],
-    components: {RepliesList, SubscribeBtn},
+    export default {
+        props: ['thread'],
+        components: {RepliesList, SubscribeBtn},
 
-    data() {
-      return {
-        repliesCount: this.initialRepliesCount,
-      };
-    },
-  };
+        data() {
+            return {
+                locked: this.thread.locked,
+                repliesCount: this.thread.replies_count,
+            };
+        },
+        methods: {
+            toggleLock() {
+                axios[this.locked ? 'delete' : 'post'](`/threads/${this.thread.slug}/lock`);
+                this.locked = !this.locked;
+            },
+        },
+    };
 </script>
