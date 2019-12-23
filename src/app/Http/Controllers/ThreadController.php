@@ -13,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
+use Zttp\Zttp;
 
 /**
  * Class ThreadController
@@ -78,6 +79,16 @@ class ThreadController extends Controller
             'body' => ['required', resolve(SpamFree::class)],
             'title' => ['required', resolve(SpamFree::class)],
         ]);
+
+        $response = Zttp::asFormParams()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => config('services.recaptcha.secret'),
+            'response' => request('g-recaptcha-response'),
+            'remoteip' => $_SERVER['REMOTE_ADDR']
+        ]);
+
+        if (!$response->json()['success']) {
+            throw new \Exception('Recaptcha failed!');
+        }
 
         $thread = Thread::create([
             'body' => request('body'),

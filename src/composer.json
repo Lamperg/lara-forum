@@ -12,6 +12,7 @@
         "ext-json": "*",
         "facade/ignition": "^1.4",
         "fideloper/proxy": "^4.0",
+        "kitetail/zttp": "^0.6.0",
         "laravel/framework": "6.*",
         "laravel/tinker": "^1.0",
         "predis/predis": "^1.1"
