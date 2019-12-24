@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Filters\ThreadFilters;
 use App\Models\Channel;
 use App\Models\Thread;
+use App\Rules\Recaptcha;
 use App\Rules\SpamFree;
 use App\Services\Trending;
 use Illuminate\Contracts\View\Factory;
@@ -13,7 +14,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
-use Zttp\Zttp;
 
 /**
  * Class ThreadController
@@ -33,9 +33,10 @@ class ThreadController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Channel $channel
+     * @param Channel       $channel
      * @param ThreadFilters $filters
-     * @param Trending $trending
+     * @param Trending      $trending
+     *
      * @return mixed
      */
     public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
@@ -52,7 +53,7 @@ class ThreadController extends Controller
 
         return view('threads.index', [
             'threads' => $threads,
-            'trending' => $trending->get()
+            'trending' => $trending->get(),
         ]);
     }
 
@@ -69,26 +70,18 @@ class ThreadController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * @param Recaptcha $recaptcha
+     *
      * @return RedirectResponse|Redirector
-     * @throws \Exception
      */
-    public function store()
+    public function store(Recaptcha $recaptcha)
     {
         request()->validate([
             'channel_id' => 'required|exists:channels,id',
             'body' => ['required', resolve(SpamFree::class)],
             'title' => ['required', resolve(SpamFree::class)],
+            'g-recaptcha-response' => ['required', $recaptcha],
         ]);
-
-        $response = Zttp::asFormParams()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => config('services.recaptcha.secret'),
-            'response' => request('g-recaptcha-response'),
-            'remoteip' => $_SERVER['REMOTE_ADDR']
-        ]);
-
-        if (!$response->json()['success']) {
-            throw new \Exception('Recaptcha failed!');
-        }
 
         $thread = Thread::create([
             'body' => request('body'),
@@ -105,10 +98,11 @@ class ThreadController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param        $channel
-     * @param Thread $thread
+     * @param          $channel
+     * @param Thread   $thread
      *
      * @param Trending $trending
+     *
      * @return Factory|Response|View
      */
     public function show($channel, Thread $thread, Trending $trending)
@@ -128,7 +122,7 @@ class ThreadController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Channel $channel
-     * @param Thread $thread
+     * @param Thread  $thread
      *
      * @return mixed
      * @throws \Exception

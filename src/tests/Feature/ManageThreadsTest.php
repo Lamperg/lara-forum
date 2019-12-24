@@ -3,17 +3,32 @@
 namespace Tests\Feature;
 
 use App\Models\Activity;
-use App\Models\Reply;
-use App\Models\User;
-use Tests\TestCase;
-use App\Models\Thread;
 use App\Models\Channel;
-use Illuminate\Foundation\Testing\TestResponse;
+use App\Models\Reply;
+use App\Models\Thread;
+use App\Models\User;
+use App\Rules\Recaptcha;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\TestResponse;
+use Mockery;
+use Tests\TestCase;
 
 class ManageThreadsTest extends TestCase
 {
     use RefreshDatabase;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $recaptchaMock = Mockery::mock(Recaptcha::class);
+        $recaptchaMock->shouldReceive('passes')->andReturn(true);
+
+        $this->app->instance(Recaptcha::class, $recaptchaMock);
+    }
 
     /**
      * @test
@@ -51,7 +66,10 @@ class ManageThreadsTest extends TestCase
         /** @var Thread $thread */
         $thread = make(Thread::class);
 
-        $response = $this->post(route('threads.store'), $thread->toArray());
+        $response = $this->post(
+            route('threads.store'),
+            $thread->toArray() + ['g-recaptcha-response' => 'token']
+        );
 
         $this
             ->get($response->headers->get('location'))
@@ -80,6 +98,18 @@ class ManageThreadsTest extends TestCase
     /**
      * @test
      */
+    public function thread_requires_recaptcha_verification()
+    {
+        // unset mock for test
+        unset($this->app[Recaptcha::class]);
+
+        $this->publishThread(['g-recaptcha-response' => 'test'])
+            ->assertSessionHasErrors('g-recaptcha-response');
+    }
+
+    /**
+     * @test
+     */
     public function thread_requires_a_valid_channel()
     {
         factory(Channel::class, 2)->create();
@@ -103,11 +133,14 @@ class ManageThreadsTest extends TestCase
         /** @var Thread $thread */
         $thread = create(Thread::class, [
             'title' => 'Foo Title',
-            'slug' => 'foo-title'
+            'slug' => 'foo-title',
         ]);
         $this->assertEquals($thread->fresh()->slug, 'foo-title');
 
-        $this->post(route('threads.store'), $thread->toArray());
+        $this->post(
+            route('threads.store'),
+            $thread->toArray() + ['g-recaptcha-response' => 'token']
+        );
         $this->assertTrue(Thread::where('slug', 'foo-title-2')->exists());
     }
 

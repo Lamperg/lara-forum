@@ -14,7 +14,7 @@ services:
     networks:
       - app-network
     volumes:
-      - ./src:/var/www/${COMPOSE_PROJECT_NAME}
+      - ./src:/var/www/lara-forum
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
 
   # NGINX Server
@@ -32,7 +32,7 @@ services:
     networks:
       - app-network
     volumes:
-      - ./src:/var/www/${COMPOSE_PROJECT_NAME}
+      - ./src:/var/www/lara-forum
       - ./docker/nginx/app.conf:/home/root/nginx/app.conf
 
   # DATABASE
