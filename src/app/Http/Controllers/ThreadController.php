@@ -8,6 +8,7 @@ use App\Models\Thread;
 use App\Rules\Recaptcha;
 use App\Rules\SpamFree;
 use App\Services\Trending;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
@@ -116,6 +117,26 @@ class ThreadController extends Controller
         $thread->visits()->record();
 
         return view('threads.show', compact('thread'));
+    }
+
+    /**
+     * Update a resource in storage.
+     *
+     * @param Channel $channel
+     * @param Thread  $thread
+     *
+     * @throws AuthorizationException
+     */
+    public function update(Channel $channel, Thread $thread)
+    {
+        $this->authorize('update', $thread);
+
+        $data = request()->validate([
+            'body' => ['required', resolve(SpamFree::class)],
+            'title' => ['required', resolve(SpamFree::class)],
+        ]);
+
+        $thread->update($data);
     }
 
     /**
