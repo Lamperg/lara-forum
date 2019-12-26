@@ -11,35 +11,8 @@
     >
         <div class="container">
             <div class="row">
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="level">
-                                <img class="img-thumbnail mr-2"
-                                     alt="{{ $thread->owner->name }}"
-                                     src="{{ $thread->owner->avatar_path }}"
-                                     width="50"
-                                >
-                                <span class="flex">
-                                <a href="{{ route('profiles.show', $thread->owner) }}">
-                                    {{ $thread->owner->name }}
-                                </a> posted {{ $thread->title }}
-                                </span>
-
-                                @can('update', $thread)
-                                    <form action="{{ $thread->path() }}" method="post">
-                                        @csrf
-                                        @method('delete')
-
-                                        <button type="submit" class="btn btn-link">Delete Thread</button>
-                                    </form>
-                                @endcan
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            {{ $thread->body }}
-                        </div>
-                    </div>
+                <div class="col-md-8" v-cloak>
+                    @include('threads._question')
 
                     <replies-list @added="repliesCount++" @removed="repliesCount--"></replies-list>
 
