@@ -54,3 +54,8 @@ Route::prefix('/api/')->name('api.')->namespace('Api')->group(function () {
 });
 
 Route::get('register/confirm', 'Auth\RegisterConfirmationController@index')->name('register_confirm');
+
+
+Route::get('scan',  function () {
+    return view('scan');
+});

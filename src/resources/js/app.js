@@ -4,6 +4,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 import eventBus from './eventBus';
+import InstantSearch from 'vue-instantsearch';
 import authorizations from './authorizations';
 
 require('./bootstrap');
@@ -27,6 +28,8 @@ window.Vue.prototype.authorize = function(...params) {
 };
 
 window.Vue.prototype.signedIn = !!window.App.signedIn;
+
+window.Vue.use(InstantSearch);
 
 /**
  * The following block of code may be used to automatically register your
@@ -60,6 +63,11 @@ Vue.component(
 Vue.component(
     'user-notifications',
     require('./components/UserNotifications.vue').default,
+);
+
+Vue.component(
+    'search-form',
+    require('./components/SearchForm.vue').default,
 );
 
 /**

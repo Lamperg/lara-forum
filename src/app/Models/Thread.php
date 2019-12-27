@@ -84,6 +84,15 @@ class Thread extends Model
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function toSearchableArray()
+    {
+        return $this->toArray() + ['path' => $this->path()];
+    }
+
+
+    /**
      * @return HasMany
      */
     public function replies()
