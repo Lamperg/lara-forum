@@ -22,6 +22,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::prefix('threads/')->name('threads.')->group(function () {
     Route::get('/', 'ThreadController@index')->name('index');
     Route::post('/', 'ThreadController@store')->name('store')->middleware('must-be-confirmed');
+    Route::get('search', 'SearchController@show')->name('search_show');
     Route::post('{thread}/lock', 'LockedThreadsController@store')->name('lock_store');
     Route::delete('{thread}/lock', 'LockedThreadsController@destroy')->name('lock_destroy');
     Route::get('/create', 'ThreadController@create')->name('create');
@@ -32,8 +33,7 @@ Route::prefix('threads/')->name('threads.')->group(function () {
     Route::get('{channel}/{thread}/replies', 'ReplyController@index')->name('replies_index');
     Route::post('{channel}/{thread}/replies', 'ReplyController@store')->name('replies_store');
     Route::post('{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@store')->name('subscriptions_store');
-    Route::delete('{channel}/{thread}/subscriptions',
-        'ThreadSubscriptionsController@destroy')->name('subscriptions_destroy');
+    Route::delete('{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@destroy')->name('subscriptions_destroy');
 });
 
 Route::prefix('replies/')->name('replies.')->group(function () {

@@ -12,6 +12,8 @@
             </div>
 
             <div class="col-md-4">
+                @include('threads._search')
+
                 @if(count($trending))
                     <div class="card mt-2">
                         <div class="card-header">
