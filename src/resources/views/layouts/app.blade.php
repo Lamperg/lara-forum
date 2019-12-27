@@ -36,6 +36,14 @@
             flex: 1;
         }
 
+        .ais-Highlight-highlighted {
+            background: yellow;
+        }
+
+        .ais-RefinementList-list {
+            margin-bottom: 0;
+        }
+
         [v-cloak] {
             display: none;
         }

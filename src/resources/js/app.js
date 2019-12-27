@@ -61,13 +61,12 @@ Vue.component(
     require('./components/pages/ThreadView.vue').default,
 );
 Vue.component(
+    'thread-search',
+    require('./components/pages/ThreadSearch.vue').default,
+);
+Vue.component(
     'user-notifications',
     require('./components/UserNotifications.vue').default,
-);
-
-Vue.component(
-    'search-form',
-    require('./components/SearchForm.vue').default,
 );
 
 /**
