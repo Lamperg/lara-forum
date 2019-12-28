@@ -4,16 +4,12 @@
             <div class="card mt-2">
                 <div class="card-body">
                     <div class="form-group">
-                        <label for="body">Reply:</label>
-                        <textarea class="form-control"
-                                  name="body"
-                                  id="body"
-                                  rows="3"
-                                  placeholder="Have something to say?"
-                                  required
-                                  v-model="body"
-                                  @keypress.enter="addReply"
-                        ></textarea>
+                        <wysiwyg-editor name="body"
+                                        ref="trix"
+                                        v-model="body"
+                                        placeholder="Have something to say?"
+                                        :should-clear="completed"
+                        />
                     </div>
 
                     <button
@@ -31,45 +27,48 @@
 </template>
 
 <script>
-  import 'at.js';
-  import 'jquery.caret';
+    import 'at.js';
+    import 'jquery.caret';
 
-  export default {
-    data() {
-      return {
-        body: ''
-      };
-    },
+    export default {
+        data() {
+            return {
+                body: '',
+                completed: false,
+            };
+        },
 
-    mounted() {
-      $('#body').atwho({
-        at: '@',
-        delay: 750,
-        callbacks: {
-          remoteFilter: function(query, callback) {
-            $.getJSON('/api/users', {name: query}, function(userNames) {
-              callback(userNames);
+        mounted() {
+            $('#body').atwho({
+                at: '@',
+                delay: 750,
+                callbacks: {
+                    remoteFilter: function(query, callback) {
+                        $.getJSON('/api/users', {name: query}, function(userNames) {
+                            callback(userNames);
+                        });
+                    },
+                },
             });
-          }
-        }
-      });
-    },
+        },
 
-    methods: {
-      /**
-       * Adds a new reply
-       */
-      addReply() {
-        axios.post(`${location.pathname}/replies`, {body: this.body}).
-            then((response) => {
-              this.body = '';
-              flash('Your reply has been posted.');
-              this.$emit('created', response.data);
-            }).
-            catch(error => {
-              flash(error.response.data, 'danger');
-            });
-      }
-    }
-  };
+        methods: {
+            /**
+             * Adds a new reply
+             */
+            addReply() {
+                axios.post(`${location.pathname}/replies`, {body: this.body}).
+                    then((response) => {
+                        this.body = '';
+                        this.completed = true;
+
+                        flash('Your reply has been posted.');
+                        this.$emit('created', response.data);
+                    }).
+                    catch(error => {
+                        flash(error.response.data, 'danger');
+                    });
+            },
+        },
+    };
 </script>

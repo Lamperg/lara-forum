@@ -17,7 +17,7 @@
         <div class="card-body">
             <div v-if="editing">
                 <div class="form-group">
-                    <textarea class="form-control" rows="3" v-model="body"></textarea>
+                    <wysiwyg-editor name="body" v-model="body"/>
                     <button class="btn btn-primary btn-sm" @click="update">Update</button>
                     <button class="btn btn-link btn-sm" @click="editing=false">Cancel</button>
                 </div>
