@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
+use Stevebauman\Purify\Facades\Purify;
 
 /**
  * Class Thread
@@ -252,5 +253,14 @@ class Thread extends Model
         }
 
         return "$slug-2";
+    }
+
+    /**
+     * @param $body
+     * @return mixed
+     */
+    public function getBodyAttribute($body)
+    {
+        return Purify::clean($body);
     }
 }

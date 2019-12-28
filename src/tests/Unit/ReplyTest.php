@@ -2,11 +2,11 @@
 
 namespace Tests\Unit;
 
-use Carbon\Carbon;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Reply;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ReplyTest extends TestCase
 {
@@ -63,5 +63,21 @@ class ReplyTest extends TestCase
 
         $reply->thread->update(['best_reply_id' => $reply->id]);
         $this->assertTrue($reply->fresh()->isBest());
+    }
+
+    /**
+     * @test
+     */
+    public function reply_body_is_sanitized_automatically()
+    {
+        $okayText = "<p>This is okay.</p>";
+        $badText = "<script>alert('bad')</script>";
+
+        /** @var Reply $thread */
+        $thread = make(Reply::class, [
+            'body' => $badText . $okayText
+        ]);
+
+        $this->assertEquals($okayText, $thread->body);
     }
 }
