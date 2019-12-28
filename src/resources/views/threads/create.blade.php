@@ -42,9 +42,7 @@
 
                             <div class="form-group">
                                 <label for="body">Body:</label>
-                                <textarea class="form-control" name="body" id="body" rows="5" required>
-                                    {{ old('body') }}
-                                </textarea>
+                                <wysiwyg-editor name="body"></wysiwyg-editor>
                             </div>
 
                             <div class="form-group">

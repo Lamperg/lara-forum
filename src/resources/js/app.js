@@ -57,6 +57,10 @@ Vue.component(
     require('./components/FlashMessage.vue').default,
 );
 Vue.component(
+    'wysiwyg-editor',
+    require('./components/WysiwygEditor.vue').default,
+);
+Vue.component(
     'thread-view',
     require('./components/pages/ThreadView.vue').default,
 );
